@@ -53,6 +53,12 @@ export function ParticleBackground({
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
 
+    // Get computed styles for theme colors
+    const getThemeColor = (colorVar: string) => {
+      const style = getComputedStyle(document.documentElement);
+      return style.getPropertyValue(colorVar).trim();
+    };
+
     // Initialize particles
     const initParticles = () => {
       particlesRef.current = [];
@@ -90,6 +96,13 @@ export function ParticleBackground({
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+      // Get current theme colors
+      const foregroundColor = getThemeColor('--foreground');
+      const primaryColor = getThemeColor('--primary');
+      const secondaryColor = getThemeColor('--secondary');
+      const accentColor = getThemeColor('--accent');
+      const mutedColor = getThemeColor('--muted');
+
       // Draw particles
       particlesRef.current.forEach((particle) => {
         particle.x += particle.vx;
@@ -103,7 +116,7 @@ export function ParticleBackground({
 
         ctx.save();
         ctx.globalAlpha = particle.opacity;
-        ctx.fillStyle = "#ffffff";
+        ctx.fillStyle = foregroundColor;
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
         ctx.fill();
@@ -111,14 +124,19 @@ export function ParticleBackground({
       });
 
       // Draw floating elements
-      floatingElementsRef.current.forEach((element) => {
+      floatingElementsRef.current.forEach((element, index) => {
         element.rotation += element.rotationSpeed;
 
         ctx.save();
         ctx.globalAlpha = element.opacity;
         ctx.translate(element.x, element.y);
         ctx.rotate((element.rotation * Math.PI) / 180);
-        ctx.strokeStyle = "#ffffff";
+        
+        // Use different theme colors for variety
+        const colors = [primaryColor, secondaryColor, accentColor, mutedColor];
+        const currentColor = colors[index % colors.length];
+        
+        ctx.strokeStyle = currentColor;
         ctx.lineWidth = 2;
         ctx.fillStyle = "transparent";
 

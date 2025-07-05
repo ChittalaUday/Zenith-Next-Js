@@ -12,6 +12,7 @@ interface FloatingElement {
   rotationSpeed: number;
   opacity: number;
   type: "circle" | "square" | "triangle" | "diamond";
+  color: string;
 }
 
 interface FloatingElementsProps {
@@ -36,6 +37,7 @@ export function FloatingElements({ className, count = 12 }: FloatingElementsProp
         rotationSpeed: (Math.random() - 0.5) * 0.3,
         opacity: Math.random() * 0.08 + 0.02,
         type: ["circle", "square", "triangle", "diamond"][Math.floor(Math.random() * 4)] as FloatingElement["type"],
+        color: ["primary", "secondary", "accent", "muted"][Math.floor(Math.random() * 4)],
       });
     }
 
@@ -68,7 +70,14 @@ export function FloatingElements({ className, count = 12 }: FloatingElementsProp
   }, [count]);
 
   const renderShape = (element: FloatingElement) => {
-    const baseClasses = "absolute pointer-events-none transition-all duration-1000 border-2 border-white";
+    const baseClasses = "absolute pointer-events-none transition-all duration-1000 border-2";
+    const colorClasses = {
+      primary: "border-primary",
+      secondary: "border-secondary",
+      accent: "border-accent",
+      muted: "border-muted",
+    };
+    
     const style = {
       left: `${element.x}px`,
       top: `${element.y}px`,
@@ -84,7 +93,7 @@ export function FloatingElements({ className, count = 12 }: FloatingElementsProp
         return (
           <div
             key={element.id}
-            className={cn(baseClasses, "rounded-full")}
+            className={cn(baseClasses, "rounded-full", colorClasses[element.color as keyof typeof colorClasses])}
             style={style}
           />
         );
@@ -93,7 +102,7 @@ export function FloatingElements({ className, count = 12 }: FloatingElementsProp
         return (
           <div
             key={element.id}
-            className={cn(baseClasses, "rounded-lg")}
+            className={cn(baseClasses, "rounded-lg", colorClasses[element.color as keyof typeof colorClasses])}
             style={style}
           />
         );
@@ -102,7 +111,7 @@ export function FloatingElements({ className, count = 12 }: FloatingElementsProp
         return (
           <div
             key={element.id}
-            className={cn(baseClasses, "clip-triangle")}
+            className={cn(baseClasses, "clip-triangle", colorClasses[element.color as keyof typeof colorClasses])}
             style={style}
           />
         );
@@ -111,7 +120,7 @@ export function FloatingElements({ className, count = 12 }: FloatingElementsProp
         return (
           <div
             key={element.id}
-            className={cn(baseClasses, "rotate-45 rounded-lg")}
+            className={cn(baseClasses, "rotate-45 rounded-lg", colorClasses[element.color as keyof typeof colorClasses])}
             style={style}
           />
         );

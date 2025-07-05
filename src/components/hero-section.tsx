@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export function HeroSection() {
   return (
-    <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative w-full min-h-screen flex justify-center overflow-hidden">
       {/* Container with max-width for larger screens */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         <div className="relative z-10 grid lg:grid-cols-2 gap-10 lg:gap-16 xl:gap-20 items-center min-h-[calc(100vh-4rem)] py-20">
@@ -17,7 +17,7 @@ export function HeroSection() {
             <div className="space-y-4">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold leading-tight tracking-tight">
                 Your Financial Future{" "}
-                <span className="block text-primary">Starts Here</span>
+                <span className="block text-primary ">Starts Here</span>
               </h1>
               <p className="text-lg sm:text-xl text-muted-foreground leading-relaxed max-w-xl">
                 Experience financial mastery with FinTechPro's innovative B2B SaaS solutions. 
@@ -78,9 +78,9 @@ export function HeroSection() {
             <div className="relative w-full max-w-md lg:max-w-lg xl:max-w-xl h-[500px] flex items-center justify-center">
               
               {/* Card 1: Total visits - Top Center */}
-              <Card className="absolute top-0 left-1/4 -translate-x-3/5 bg-card/95 backdrop-blur-sm border-border/50 shadow-xl w-72 lg:w-80 z-30">
-                <CardContent className="p-6">
-                  <div className="space-y-4">
+              <Card className="absolute top-0 left-1/4 -translate-x-3/5 bg-card/95 backdrop-blur-sm border-border/50 shadow-xl w-64 sm:w-72 lg:w-80 z-30">
+                <CardContent className="p-4 sm:p-6">
+                  <div className="space-y-3 sm:space-y-4">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium text-muted-foreground">Statistics</span>
                       <span className="inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-semibold text-foreground">
@@ -88,14 +88,14 @@ export function HeroSection() {
                       </span>
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold">Total visits</h3>
+                      <h3 className="text-lg sm:text-xl font-semibold">Total visits</h3>
                       <div className="flex items-baseline gap-2 mt-2">
-                        <span className="text-3xl lg:text-4xl font-mono font-bold">325k</span>
+                        <span className="text-2xl sm:text-3xl lg:text-4xl font-mono font-bold">325k</span>
                         <span className="text-sm font-medium text-green-600">+18.34%</span>
                       </div>
                     </div>
                     {/* Chart placeholder */}
-                    <div className="w-full h-16 bg-gradient-to-r from-green-500/10 to-blue-500/10 rounded-lg flex items-end p-2">
+                    <div className="w-full h-12 sm:h-16 bg-gradient-to-r from-green-500/10 to-blue-500/10 rounded-lg flex items-end p-2">
                       <svg width="100%" height="100%" viewBox="0 0 200 60" fill="none" className="text-primary">
                         <polyline 
                           points="0,50 40,30 80,40 120,10 160,30 200,5" 
@@ -112,9 +112,9 @@ export function HeroSection() {
               </Card>
 
               {/* Card 2: Views by country - Top Right */}
-              <Card className="absolute top-20 left-1/2  right-0 bg-card/95 backdrop-blur-sm border-border/50 shadow-xl w-72 lg:w-80 z-20">
-                <CardContent className="p-6">
-                  <div className="space-y-4">
+              <Card className="absolute top-20 left-1/2  right-0 bg-card/95 backdrop-blur-sm border-border/50 shadow-xl w-64 sm:w-72 lg:w-80 z-20">
+                <CardContent className="p-4 sm:p-6">
+                  <div className="space-y-3 sm:space-y-4">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium text-muted-foreground">Statistics</span>
                       <span className="inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-semibold text-foreground">
@@ -122,10 +122,10 @@ export function HeroSection() {
                       </span>
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold">Views by country</h3>
-                      <div className="flex items-center gap-4 mt-4">
+                      <h3 className="text-lg sm:text-xl font-semibold">Views by country</h3>
+                      <div className="flex items-center gap-3 sm:gap-4 mt-3 sm:mt-4">
                         {/* Pie chart placeholder */}
-                        <div className="relative w-16 h-16">
+                        <div className="relative w-12 h-12 sm:w-16 sm:h-16">
                           <svg width="64" height="64" viewBox="0 0 36 36" className="w-full h-full">
                             <circle cx="18" cy="18" r="16" fill="hsl(var(--muted))" />
                             <path d="M18 2 a 16 16 0 0 1 13.5 24" fill="none" stroke="hsl(var(--primary))" strokeWidth="6" />
@@ -133,17 +133,17 @@ export function HeroSection() {
                             <path d="M18 2 a 16 16 0 0 1 0 32" fill="none" stroke="hsl(var(--accent))" strokeWidth="6" />
                           </svg>
                         </div>
-                        <div className="flex flex-col gap-2 text-sm">
+                        <div className="flex flex-col gap-1 sm:gap-2 text-xs sm:text-sm">
                           <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-primary"></div>
+                            <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-primary"></div>
                             <span>USA</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-secondary"></div>
+                            <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-secondary"></div>
                             <span>Canada</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 rounded-full bg-accent"></div>
+                            <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-accent"></div>
                             <span>U.K.</span>
                           </div>
                         </div>
@@ -154,9 +154,9 @@ export function HeroSection() {
               </Card>
 
               {/* Card 3: Real-time customers - Bottom Left */}
-              <Card className="absolute bottom-0 left-0 bg-card/95 backdrop-blur-sm border-border/50 shadow-xl w-80 lg:w-96 z-10">
-                <CardContent className="p-6">
-                  <div className="space-y-4">
+              <Card className="absolute bottom-0 left-0 bg-card/95 backdrop-blur-sm border-border/50 shadow-xl w-72 sm:w-80 lg:w-96 z-10">
+                <CardContent className="p-4 sm:p-6">
+                  <div className="space-y-3 sm:space-y-4">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium text-muted-foreground">Statistics</span>
                       <span className="inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-semibold text-foreground">
@@ -164,14 +164,14 @@ export function HeroSection() {
                       </span>
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold">Active customers</h3>
+                      <h3 className="text-lg sm:text-xl font-semibold">Active customers</h3>
                       <div className="flex items-baseline gap-2 mt-2">
-                        <span className="text-3xl lg:text-4xl font-mono font-bold">1,027</span>
+                        <span className="text-2xl sm:text-3xl lg:text-4xl font-mono font-bold">1,027</span>
                         <span className="text-sm font-medium text-green-600">+12.75%</span>
                       </div>
                     </div>
                     {/* Chart placeholder */}
-                    <div className="w-full h-16 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg flex items-end p-2">
+                    <div className="w-full h-12 sm:h-16 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg flex items-end p-2">
                       <svg width="100%" height="100%" viewBox="0 0 200 60" fill="none" className="text-primary">
                         <polyline 
                           points="0,50 40,40 80,30 120,50 160,20 200,40" 

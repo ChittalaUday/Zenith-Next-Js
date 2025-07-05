@@ -170,7 +170,7 @@ export function NavigationMenuTrigger({
       <button
         onClick={handleClick}
         className={cn(
-          "flex items-center justify-between w-full px-3 py-3 text-sm font-medium transition-colors rounded-md",
+          "flex items-center justify-between w-full px-3 py-3 text-base font-medium transition-colors rounded-md",
           "bg-transparent text-foreground hover:bg-accent hover:text-accent-foreground",
           "focus:outline-none ",
           className
@@ -193,7 +193,7 @@ export function NavigationMenuTrigger({
     <button
       onClick={onClick}
       className={cn(
-        "inline-flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors",
+        "inline-flex items-center rounded-md px-3 py-2 text-base font-medium transition-colors",
         "bg-transparent text-foreground hover:bg-accent hover:text-accent-foreground",
         "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
         isOpen && !hasDropdown && "bg-accent text-accent-foreground",
@@ -229,6 +229,10 @@ export function NavigationMenuContent({
   const isVisible = open || isHovered;
   if (!isVisible) return null;
 
+  // Count children to determine layout
+  const childrenArray = React.Children.toArray(children);
+  const shouldUseHorizontalLayout = !isMobile && childrenArray.length > 8;
+
   if (isMobile) {
     return (
       <div className={cn("w-full mt-2 space-y-1", className)}>
@@ -244,12 +248,32 @@ export function NavigationMenuContent({
   return (
     <div
       className={cn(
-        "absolute left-0 top-full mt-2 w-48 rounded-md border bg-popover text-popover-foreground shadow-md z-50",
+        "absolute left-0 top-full mt-2 rounded-md border bg-popover text-popover-foreground shadow-md z-50",
         "animate-in fade-in zoom-in-95 duration-200",
+        shouldUseHorizontalLayout ? "w-auto min-w-[600px]" : "w-48",
         className
       )}
     >
-      <div className="py-1">{children}</div>
+      <div className={cn(
+        "py-1",
+        shouldUseHorizontalLayout ? "grid grid-cols-3 gap-1 p-2 divide-x divide-border" : ""
+      )}>
+        {shouldUseHorizontalLayout ? (
+          <>
+            <div className="space-y-1 pr-2">
+              {childrenArray.slice(0, Math.ceil(childrenArray.length / 3))}
+            </div>
+            <div className="space-y-1 px-2">
+              {childrenArray.slice(Math.ceil(childrenArray.length / 3), Math.ceil(childrenArray.length / 3) * 2)}
+            </div>
+            <div className="space-y-1 pl-2">
+              {childrenArray.slice(Math.ceil(childrenArray.length / 3) * 2)}
+            </div>
+          </>
+        ) : (
+          children
+        )}
+      </div>
     </div>
   );
 }
@@ -414,11 +438,31 @@ export function NavigationSubMenu({
       {isHovered && (
         <div
           className={cn(
-            "absolute top-0 w-48 rounded-md border bg-popover text-popover-foreground shadow-md z-50 animate-in fade-in zoom-in-95 duration-200",
-            position === "right" ? "left-full ml-2" : "right-full mr-2"
+            "absolute top-0 rounded-md border bg-popover text-popover-foreground shadow-md z-50 animate-in fade-in zoom-in-95 duration-200",
+            position === "right" ? "left-full ml-2" : "right-full mr-2",
+            React.Children.count(children) > 8 ? "w-auto min-w-[600px]" : "w-48"
           )}
         >
-          <div className="py-1">{children}</div>
+          <div className={cn(
+            "py-1",
+            React.Children.count(children) > 8 ? "grid grid-cols-3 gap-1 p-2 divide-x divide-border" : ""
+          )}>
+            {React.Children.count(children) > 8 ? (
+              <>
+                <div className="space-y-1 pr-2">
+                  {React.Children.toArray(children).slice(0, Math.ceil(React.Children.count(children) / 3))}
+                </div>
+                <div className="space-y-1 px-2">
+                  {React.Children.toArray(children).slice(Math.ceil(React.Children.count(children) / 3), Math.ceil(React.Children.count(children) / 3) * 2)}
+                </div>
+                <div className="space-y-1 pl-2">
+                  {React.Children.toArray(children).slice(Math.ceil(React.Children.count(children) / 3) * 2)}
+                </div>
+              </>
+            ) : (
+              children
+            )}
+          </div>
         </div>
       )}
     </div>

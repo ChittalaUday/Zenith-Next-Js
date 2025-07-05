@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { ModeToggle } from "./mode-toggle";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 type MenuItem = {
   label: string;
@@ -25,18 +26,87 @@ const menuData: MenuItem[] = [
   {
     label: "Services",
     subItems: [
-      { label: "Company Registration", href: "#" },
-      { label: "GST Registration", href: "#" },
-      { label: "Trademark", href: "#" },
       {
-        label: "More Services",
+        label: "Startup",
         subItems: [
+          { label: "Startup India", href: "#" },
+          { label: "Trade License", href: "#" },
+          { label: "FSSAI Registration", href: "#" },
           { label: "FSSAI License", href: "#" },
-          { label: "MSME Registration", href: "#" },
-        ],
+          { label: "Halal License & Certification", href: "#" },
+          { label: "ICEGATE Registration", href: "#" },
+          { label: "Import Export Code", href: "#" },
+          { label: "Legal Entity Identifier Code", href: "#" },
+          { label: "ISO Registration", href: "#" },
+          { label: "PF Registration", href: "#" },
+          { label: "ESI Registration", href: "#" },
+          { label: "Professional Tax Registration", href: "#" },
+          { label: "RCMC Registration", href: "#" },
+          { label: "TN RERA Registration for Agents", href: "#" },
+          { label: "12A and 80G Registration", href: "#" },
+          { label: "12A Registration", href: "#" },
+          { label: "80G Registration", href: "#" },
+          { label: "APEDA Registration", href: "#" },
+          { label: "Barcode Registration", href: "#" },
+          { label: "BIS Registration", href: "#" },
+          { label: "Certificate of Incumbency", href: "#" },
+          { label: "Darpan Registration", href: "#" },
+          { label: "Digital Signature", href: "#" },
+          { label: "Shop Act Registration", href: "#" },
+          { label: "Drug License", href: "#" },
+          { label: "Udyam Registration", href: "#" },
+          { label: "FCRA Registration", href: "#" },
+          { label: "Fire License", href: "#" }
+        ]
       },
-    ],
-  },
+      {
+        label: "Registrations",
+        subItems: [
+          { label: "Trade License", href: "#" },
+          { label: "ISO Registration", href: "#" },
+          { label: "PF Registration", href: "#" },
+          { label: "ESI Registration", href: "#" },
+          { label: "Professional Tax Registration", href: "#" },
+          { label: "RCMC Registration", href: "#" },
+          { label: "TN RERA Registration for Agents", href: "#" }
+        ]
+      },
+      {
+        label: "Trademark",
+        subItems: [
+          { label: "12A Registration", href: "#" },
+          { label: "80G Registration", href: "#" },
+          { label: "APEDA Registration", href: "#" },
+          { label: "Barcode Registration", href: "#" },
+          { label: "BIS Registration", href: "#" },
+          { label: "Certificate of Incumbency", href: "#" }
+        ]
+      },
+      {
+        label: "Goods & Services Tax",
+        subItems: [
+          { label: "Digital Signature", href: "#" },
+          { label: "Shop Act Registration", href: "#" },
+          { label: "Drug License", href: "#" },
+          { label: "Udyam Registration", href: "#" },
+          { label: "FCRA Registration", href: "#" },
+          { label: "Fire License", href: "#" }
+        ]
+      },
+      {
+        label: "Income Tax",
+    
+      },
+      {
+        label: "MCA",
+      },
+      {
+        label: "Consultation",
+          },
+      
+    ]
+  }
+  ,
   {
     label: "Knowledge Center",
     subItems: [
@@ -59,6 +129,17 @@ const menuData: MenuItem[] = [
 export function NavBar() {
   const [open, setOpen] = React.useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [isSticky, setIsSticky] = React.useState(false);
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setIsSticky(scrollTop > 0);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const toggle = (key: string) => {
     setOpen((prev) => (prev === key ? null : key));
@@ -158,9 +239,25 @@ export function NavBar() {
       }
     });
 
+  // Reusable action buttons component
+  const ActionButtons = ({ className = "" }: { className?: string }) => (
+    <div className={cn("flex items-center gap-2", className)}>
+      <Link href="/login">
+        <Button variant="default">Login / Signup</Button>
+      </Link>
+      <div className="flex justify-end ml-4">
+        <ModeToggle />
+      </div>
+    </div>
+  );
+
   return (
     <>
-      <div className="w-full border-b bg-background text-foreground">
+      <div className={cn(
+        "w-full text-foreground bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60",
+        "sticky top-0 z-50 transition-all duration-200",
+        isSticky && "border-b border-border/40 shadow-sm"
+      )}>
         <div className="flex items-center justify-between px-6 py-4">
           <div className="font-bold text-lg">ZenithFilings</div>
 
@@ -171,12 +268,8 @@ export function NavBar() {
             </NavigationMenuRoot>
           </div>
 
-          <div className="hidden md:flex items-center gap-2">
-            <Button variant="default">Login / Signup</Button>
-            <div className="flex justify-end ml-4">
-              <ModeToggle />
-            </div>
-          </div>
+          {/* Desktop action buttons */}
+          <ActionButtons className="hidden md:flex" />
 
           {/* Mobile toggle */}
           <button
@@ -205,10 +298,7 @@ export function NavBar() {
         {renderMobileMenu(menuData)}
 
         <div className="mt-4 flex flex-col gap-2">
-          <Button variant="default">Login / Signup</Button>
-          <div className="flex justify-end">
-            <ModeToggle />
-          </div>
+          <ActionButtons className="flex flex-col gap-2" />
         </div>
       </div>
     </>
