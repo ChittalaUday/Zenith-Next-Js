@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
@@ -12,6 +14,44 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
       )}
       {...props}
     />
+  )
+}
+
+// AnimatedCard: Card with mouse-move background effect
+function AnimatedCard({ className, children, ...props }: React.ComponentProps<"div">) {
+  const ref = React.useRef<HTMLDivElement>(null)
+  const [gradient, setGradient] = React.useState<string>("")
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const card = ref.current
+    if (!card) return
+    const rect = card.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    setGradient(
+      `radial-gradient(600px circle at ${x}px ${y}px, hsl(var(--secondary)/0.13), transparent 80%)`
+    )
+  }
+
+  const handleMouseLeave = () => {
+    setGradient("")
+  }
+
+  return (
+    <div
+      ref={ref}
+      data-slot="animated-card"
+      className={cn(
+        "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm transition-all duration-300 group hover-lift hover-glow overflow-hidden relative",
+        className
+      )}
+      style={gradient ? { background: gradient } : undefined}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      {...props}
+    >
+      {children}
+    </div>
   )
 }
 
@@ -89,4 +129,5 @@ export {
   CardAction,
   CardDescription,
   CardContent,
+  AnimatedCard,
 }

@@ -21,115 +21,29 @@ type MenuItem = {
   subItems?: MenuItem[];
 };
 
-const menuData: MenuItem[] = [
-  { label: "Home", href: "#" },
-  {
-    label: "Services",
-    subItems: [
-      {
-        label: "Startup",
-        subItems: [
-          { label: "Startup India", href: "#" },
-          { label: "Trade License", href: "#" },
-          { label: "FSSAI Registration", href: "#" },
-          { label: "FSSAI License", href: "#" },
-          { label: "Halal License & Certification", href: "#" },
-          { label: "ICEGATE Registration", href: "#" },
-          { label: "Import Export Code", href: "#" },
-          { label: "Legal Entity Identifier Code", href: "#" },
-          { label: "ISO Registration", href: "#" },
-          { label: "PF Registration", href: "#" },
-          { label: "ESI Registration", href: "#" },
-          { label: "Professional Tax Registration", href: "#" },
-          { label: "RCMC Registration", href: "#" },
-          { label: "TN RERA Registration for Agents", href: "#" },
-          { label: "12A and 80G Registration", href: "#" },
-          { label: "12A Registration", href: "#" },
-          { label: "80G Registration", href: "#" },
-          { label: "APEDA Registration", href: "#" },
-          { label: "Barcode Registration", href: "#" },
-          { label: "BIS Registration", href: "#" },
-          { label: "Certificate of Incumbency", href: "#" },
-          { label: "Darpan Registration", href: "#" },
-          { label: "Digital Signature", href: "#" },
-          { label: "Shop Act Registration", href: "#" },
-          { label: "Drug License", href: "#" },
-          { label: "Udyam Registration", href: "#" },
-          { label: "FCRA Registration", href: "#" },
-          { label: "Fire License", href: "#" }
-        ]
-      },
-      {
-        label: "Registrations",
-        subItems: [
-          { label: "Trade License", href: "#" },
-          { label: "ISO Registration", href: "#" },
-          { label: "PF Registration", href: "#" },
-          { label: "ESI Registration", href: "#" },
-          { label: "Professional Tax Registration", href: "#" },
-          { label: "RCMC Registration", href: "#" },
-          { label: "TN RERA Registration for Agents", href: "#" }
-        ]
-      },
-      {
-        label: "Trademark",
-        subItems: [
-          { label: "12A Registration", href: "#" },
-          { label: "80G Registration", href: "#" },
-          { label: "APEDA Registration", href: "#" },
-          { label: "Barcode Registration", href: "#" },
-          { label: "BIS Registration", href: "#" },
-          { label: "Certificate of Incumbency", href: "#" }
-        ]
-      },
-      {
-        label: "Goods & Services Tax",
-        subItems: [
-          { label: "Digital Signature", href: "#" },
-          { label: "Shop Act Registration", href: "#" },
-          { label: "Drug License", href: "#" },
-          { label: "Udyam Registration", href: "#" },
-          { label: "FCRA Registration", href: "#" },
-          { label: "Fire License", href: "#" }
-        ]
-      },
-      {
-        label: "Income Tax",
-    
-      },
-      {
-        label: "MCA",
-      },
-      {
-        label: "Consultation",
-          },
-      
-    ]
+// Function to fetch menu data from API
+async function getMenuData(): Promise<MenuItem[]> {
+  try {
+    const response = await fetch('/api/menu');
+    const result = await response.json();
+    return result.data;
+  } catch (error) {
+    console.error('Error fetching menu data:', error);
+    // Fallback data
+    return [
+      { label: "Home", href: "#" },
+      { label: "Services", href: "#" },
+      { label: "Contact", href: "#" },
+    ];
   }
-  ,
-  {
-    label: "Knowledge Center",
-    subItems: [
-      { label: "Blog", href: "#" },
-      { label: "Guides", href: "#" },
-      { label: "FAQs", href: "#" },
-      {
-        label: "More Services",
-        subItems: [
-          { label: "FSSAI License", href: "#" },
-          { label: "MSME Registration", href: "#" },
-        ],
-      },
-    ],
-  },
-  { label: "Pricing", href: "#" },
-  { label: "Contact", href: "#" },
-];
+}
 
 export function NavBar() {
   const [open, setOpen] = React.useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isSticky, setIsSticky] = React.useState(false);
+  const [menuData, setMenuData] = React.useState<MenuItem[]>([]);
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -141,6 +55,21 @@ export function NavBar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  React.useEffect(() => {
+    const fetchMenuData = async () => {
+      try {
+        const data = await getMenuData();
+        setMenuData(data);
+      } catch (error) {
+        console.error('Error fetching menu:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMenuData();
+  }, []);
+
   const toggle = (key: string) => {
     setOpen((prev) => (prev === key ? null : key));
   };
@@ -148,14 +77,26 @@ export function NavBar() {
   const renderDesktopMenu = (items: MenuItem[]) =>
     items.map((item) => {
       if (item.subItems) {
+        // If item has both href and subItems, render label as link and dropdown arrow as trigger
         return (
           <NavigationMenuItem key={item.label}>
-            <NavigationMenuTrigger
-              onClick={() => toggle(item.label)}
-              open={open === item.label}
-            >
-              {item.label}
-            </NavigationMenuTrigger>
+            <div className="flex items-center gap-1">
+              {item.href ? (
+                <NavigationMenuLink href={item.href} className="px-3 py-2 text-base font-medium">
+                  {item.label}
+                </NavigationMenuLink>
+              ) : (
+                <span className="px-3 py-2 text-base font-medium">{item.label}</span>
+              )}
+              <NavigationMenuTrigger
+                onClick={() => toggle(item.label)}
+                open={open === item.label}
+                hasDropdown
+                className="px-1"
+              >
+                <span className="sr-only">Open submenu</span>
+              </NavigationMenuTrigger>
+            </div>
             <NavigationMenuContent open={open === item.label}>
               {item.subItems.map((sub) =>
                 sub.subItems ? (
@@ -190,41 +131,47 @@ export function NavBar() {
     items.map((item) => {
       if (item.subItems) {
         return (
-          <NavigationSubMenu
-            key={item.label}
-            trigger={item.label}
-            isMobile
-            closeMobileMenu={() => setMobileOpen(false)}
-          >
-            {item.subItems.map((sub) =>
-              sub.subItems ? (
-                <NavigationSubMenu
-                  key={sub.label}
-                  trigger={sub.label}
-                  isMobile
-                  closeMobileMenu={() => setMobileOpen(false)}
-                >
-                  {sub.subItems.map((subSub) => (
-                    <NavigationMenuLink
-                      key={subSub.label}
-                      href={subSub.href}
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      {subSub.label}
-                    </NavigationMenuLink>
-                  ))}
-                </NavigationSubMenu>
-              ) : (
-                <NavigationMenuLink
-                  key={sub.label}
-                  href={sub.href}
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {sub.label}
+          <div key={item.label} className="flex flex-col">
+            <div className="flex items-center gap-1">
+              {item.href ? (
+                <NavigationMenuLink href={item.href} onClick={() => setMobileOpen(false)} className="px-3 py-2 text-base font-medium">
+                  {item.label}
                 </NavigationMenuLink>
-              )
+              ) : (
+                <span className="px-3 py-2 text-base font-medium">{item.label}</span>
+              )}
+              <NavigationMenuTrigger
+                onClick={() => toggle(item.label)}
+                open={open === item.label}
+                hasDropdown
+                className="px-1"
+                isMobile
+                onMobileToggle={() => toggle(item.label)}
+                closeMobileMenu={() => setMobileOpen(false)}
+              >
+                <span className="sr-only">Open submenu</span>
+              </NavigationMenuTrigger>
+            </div>
+            {open === item.label && (
+              <NavigationMenuContent open={open === item.label} isMobile>
+                {item.subItems.map((sub) =>
+                  sub.subItems ? (
+                    <NavigationSubMenu key={sub.label} trigger={sub.label} isMobile closeMobileMenu={() => setMobileOpen(false)}>
+                      {sub.subItems.map((subSub) => (
+                        <NavigationMenuLink key={subSub.label} href={subSub.href} onClick={() => setMobileOpen(false)}>
+                          {subSub.label}
+                        </NavigationMenuLink>
+                      ))}
+                    </NavigationSubMenu>
+                  ) : (
+                    <NavigationMenuLink key={sub.label} href={sub.href} onClick={() => setMobileOpen(false)}>
+                      {sub.label}
+                    </NavigationMenuLink>
+                  )
+                )}
+              </NavigationMenuContent>
             )}
-          </NavigationSubMenu>
+          </div>
         );
       } else {
         return (
@@ -254,7 +201,7 @@ export function NavBar() {
   return (
     <>
       <div className={cn(
-        "w-full text-foreground bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60",
+        "w-full text-foreground  backdrop-blur supports-[backdrop-filter]:bg-background/60",
         "sticky top-0 z-50 transition-all duration-200",
         isSticky && "border-b border-border/40 shadow-sm"
       )}>

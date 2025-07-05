@@ -32,29 +32,31 @@ export function NavigationMenuRoot({
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 z-50 bg-background/80 backdrop-blur-sm">
-          <div className="fixed inset-y-0 right-0 w-full max-w-sm bg-background border-l shadow-lg overflow-y-auto">
-            {/* Close button inside sidebar, top left */}
-            <div className="flex justify-end p-4">
+        <div className="md:hidden fixed inset-0 z-50 bg-background">
+          <div className="flex flex-col h-full w-full">
+            {/* Close button header */}
+            <div className="flex justify-end p-4 border-b bg-background">
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="p-2 rounded-md text-foreground hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 "
+                className="p-2 rounded-md text-foreground hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                 aria-label="Close mobile menu"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
-            {/* Mobile menu items */}
-            <div className="flex flex-col px-4 pb-4 space-y-2">
-              {React.Children.map(children, (child) =>
-                React.isValidElement(child)
-                  ? React.cloneElement(child, {
-                      isMobile: true,
-                      closeMobileMenu: () => setIsMobileMenuOpen(false),
-                    } as any)
-                  : child
-              )}
+            {/* Mobile menu items - full height with scrollbar */}
+            <div className="flex-1 overflow-y-auto">
+              <div className="flex flex-col px-4 py-4 space-y-2">
+                {React.Children.map(children, (child) =>
+                  React.isValidElement(child)
+                    ? React.cloneElement(child, {
+                        isMobile: true,
+                        closeMobileMenu: () => setIsMobileMenuOpen(false),
+                      } as any)
+                    : child
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -103,7 +105,7 @@ export function NavigationMenuItem({
     return (
       <div className={cn("w-full", className)}>
         {React.Children.map(children, (child) =>
-          React.isValidElement(child)
+          React.isValidElement(child) && typeof child.type !== "string"
             ? React.cloneElement(child, {
                 isHovered: isOpen,
                 isMobile: true,
@@ -123,7 +125,7 @@ export function NavigationMenuItem({
       onMouseLeave={handleMouseLeave}
     >
       {React.Children.map(children, (child) =>
-        React.isValidElement(child)
+        React.isValidElement(child) && typeof child.type !== "string"
           ? React.cloneElement(child, { isHovered } as any)
           : child
       )}
@@ -404,7 +406,7 @@ export function NavigationSubMenu({
         </div>
 
         {isOpen && (
-          <div className="flex flex-col w-full pl-4 mt-1 space-y-1 border-l border-muted">
+          <div className="flex flex-col w-full pl-4 mt-1 space-y-1 border-l border-muted max-h-60 overflow-y-auto">
             {React.Children.map(children, (child) =>
               React.isValidElement(child)
                 ? React.cloneElement(child, {
