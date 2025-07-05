@@ -1,13 +1,28 @@
-import { LoginForm } from "@/components/login-form";
+import { NavBar } from "@/components/nav-bar";
+import { HeroSection } from "@/components/hero-section";
+import { ServicesSection } from "@/components/services-section";
+import { HowItWorksSection } from "@/components/how-it-works-section";
+import { TestimonialsSection } from "@/components/testimonials-section";
+import { CallToActionSection } from "@/components/call-to-action-section";
+import { FooterSection } from "@/components/footer-section";
+import { ParticleBackground } from "@/components/particle-background";
+import { FloatingElements } from "@/components/floating-elements";
 
 export default function Home() {
   return (
     <>
-      <div className="bg-background flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
-        <div className="w-full max-w-sm">
-          <LoginForm />
-        </div>
-      </div>
+      <ParticleBackground 
+        particleCount={16} 
+        floatingElementsCount={2}
+      />
+      <FloatingElements count={4} />
+      <NavBar />
+      <HeroSection />
+      <ServicesSection />
+      <HowItWorksSection />
+      <TestimonialsSection />
+      <CallToActionSection />
+      <FooterSection />
     </>
   );
 }

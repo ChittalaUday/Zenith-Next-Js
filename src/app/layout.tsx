@@ -3,9 +3,9 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
-  title: "Zenith Fillings",
+  title: "Zenith Filings",
   description:
-    "Zenith Fillings is a Next.js application that showcases the power of server components and static generation.",
+    "Zenith Filings is a one place solution for all your business needs. We provide a wide range of services including company registration, trademark registration, GST registration, and more.",
 };
 
 export default function RootLayout({
@@ -24,6 +24,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            {" "}
             {children}
           </ThemeProvider>
         </body>

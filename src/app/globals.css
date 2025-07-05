@@ -114,7 +114,29 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 200ms ease-out forwards;
+}
+
+/* Custom clip-path for triangle shape */
+.clip-triangle {
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
 }
