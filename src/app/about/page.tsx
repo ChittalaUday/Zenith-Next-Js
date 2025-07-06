@@ -1,12 +1,11 @@
-import { NavBar } from "@/components/nav-bar";
-import { FooterSection } from "@/components/footer-section";
-import { ParticleBackground } from "@/components/particle-background";
-import { FloatingElements } from "@/components/floating-elements";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
+import { getColorByString } from "@/lib/color";
+import { NavBar } from "@/components/home/nav-bar";
+import { FooterSection } from "@/components/footer-section";
+import { ParticleBackground } from "@/components/utill/particle-background";
 import { 
   Users, 
   Award, 
@@ -15,13 +14,10 @@ import {
   TrendingUp, 
   Globe, 
   CheckCircle, 
-  Star,
-  Building2,
   FileText,
   Zap,
   Heart
 } from "lucide-react";
-import { getColorByString } from "@/lib/color";
 
 export default function AboutPage() {
   return (
@@ -38,10 +34,9 @@ export default function AboutPage() {
       {/* Content */}
       <div className="relative z-10">
         <ParticleBackground 
-          particleCount={12} 
+          particleCount={10} 
           floatingElementsCount={4}
         />
-        <FloatingElements count={6} />
         <NavBar />
         
         {/* Hero Section */}
@@ -72,9 +67,9 @@ export default function AboutPage() {
                 ].map((stat, index) => (
                   <Card key={index} className="text-center border-border/50 bg-card/50 backdrop-blur-sm">
                     <CardContent className="p-6">
-                      <div className={`w-12 h-12 mx-auto mb-3 rounded-lg flex items-center justify-center ${getColorByString(stat.label)}`}>
-                        <stat.icon className="w-6 h-6" />
-                      </div>
+                                              <div className={`w-12 h-12 mx-auto mb-3 rounded-lg flex items-center justify-center ${getColorByString(stat.label)}`}>
+                          <stat.icon className="w-6 h-6" />
+                        </div>
                       <div className="text-2xl font-bold">{stat.value}</div>
                       <div className="text-sm text-muted-foreground">{stat.label}</div>
                     </CardContent>
@@ -129,9 +124,9 @@ export default function AboutPage() {
                         { icon: Heart, title: "Dedicated Support", desc: "Our expert team is always ready to help you succeed" }
                       ].map((value, index) => (
                         <div key={index} className="flex items-start gap-4">
-                          <div className={`flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center ${getColorByString(value.title)}`}>
-                            <value.icon className="w-6 h-6" />
-                          </div>
+                                                      <div className={`flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center ${getColorByString(value.title)}`}>
+                              <value.icon className="w-6 h-6" />
+                            </div>
                           <div className="space-y-2">
                             <h4 className="font-semibold">{value.title}</h4>
                             <p className="text-sm text-muted-foreground">{value.desc}</p>
@@ -268,9 +263,9 @@ export default function AboutPage() {
               ].map((value, index) => (
                 <Card key={index} className="border-border/50 bg-card/50 backdrop-blur-sm hover:shadow-lg transition-all duration-300 group">
                   <CardContent className="p-6">
-                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center transition-colors ${getColorByString(value.title)}`}>
-                      <value.icon className="w-6 h-6" />
-                    </div>
+                                          <div className={`w-12 h-12 rounded-lg flex items-center justify-center transition-colors ${getColorByString(value.title)}`}>
+                        <value.icon className="w-6 h-6" />
+                      </div>
                     <div className="space-y-2">
                       <h3 className="text-xl font-semibold">{value.title}</h3>
                       <p className="text-muted-foreground">{value.description}</p>

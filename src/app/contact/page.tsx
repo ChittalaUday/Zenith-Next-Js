@@ -1,26 +1,14 @@
-import { NavBar } from "@/components/nav-bar";
-import { FooterSection } from "@/components/footer-section";
-import { ParticleBackground } from "@/components/particle-background";
-import { FloatingElements } from "@/components/floating-elements";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Separator } from "@/components/ui/separator";
-import { 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Clock, 
-  MessageSquare, 
-  Send,
-  Building2,
-  Users,
-  CheckCircle,
-  Star
-} from "lucide-react";
+import { getIcon } from "@/lib/icons";
+import { getColorByString } from "@/lib/color";
+import { NavBar } from "@/components/home/nav-bar";
+import { FooterSection } from "@/components/footer-section";
+import { ParticleBackground } from "@/components/utill/particle-background";
 
 export default function ContactPage() {
   return (
@@ -37,10 +25,9 @@ export default function ContactPage() {
       {/* Content */}
       <div className="relative z-10">
         <ParticleBackground 
-          particleCount={10} 
+          particleCount={12} 
           floatingElementsCount={3}
         />
-        <FloatingElements count={5} />
         <NavBar />
         
         {/* Hero Section */}
@@ -129,7 +116,10 @@ export default function ContactPage() {
                       </div>
                       
                       <Button type="submit" size="lg" className="w-full">
-                        <Send className="w-4 h-4 mr-2" />
+                        {(() => {
+                          const SendIcon = getIcon("Send");
+                          return <SendIcon className="w-4 h-4 mr-2" />;
+                        })()}
                         Send Message
                       </Button>
                     </form>
@@ -151,8 +141,11 @@ export default function ContactPage() {
                   <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
                     <CardContent className="p-6">
                       <div className="flex items-start gap-4">
-                        <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                          <MapPin className="w-6 h-6 text-primary" />
+                        <div className={`flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center ${getColorByString("Main Office")}`}>
+                          {(() => {
+                            const MapPinIcon = getIcon("MapPin");
+                            return <MapPinIcon className="w-6 h-6" />;
+                          })()}
                         </div>
                         <div className="space-y-2">
                           <h3 className="font-semibold">Main Office</h3>
@@ -170,8 +163,11 @@ export default function ContactPage() {
                   <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
                     <CardContent className="p-6">
                       <div className="flex items-start gap-4">
-                        <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                          <Phone className="w-6 h-6 text-primary" />
+                        <div className={`flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center ${getColorByString("Phone Numbers")}`}>
+                          {(() => {
+                            const PhoneIcon = getIcon("Phone");
+                            return <PhoneIcon className="w-6 h-6" />;
+                          })()}
                         </div>
                         <div className="space-y-2">
                           <h3 className="font-semibold">Phone Numbers</h3>
@@ -189,8 +185,11 @@ export default function ContactPage() {
                   <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
                     <CardContent className="p-6">
                       <div className="flex items-start gap-4">
-                        <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                          <Mail className="w-6 h-6 text-primary" />
+                        <div className={`flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center ${getColorByString("Email Addresses")}`}>
+                          {(() => {
+                            const MailIcon = getIcon("Mail");
+                            return <MailIcon className="w-6 h-6" />;
+                          })()}
                         </div>
                         <div className="space-y-2">
                           <h3 className="font-semibold">Email Addresses</h3>
@@ -208,8 +207,11 @@ export default function ContactPage() {
                   <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
                     <CardContent className="p-6">
                       <div className="flex items-start gap-4">
-                        <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                          <Clock className="w-6 h-6 text-primary" />
+                        <div className={`flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center ${getColorByString("Business Hours")}`}>
+                          {(() => {
+                            const ClockIcon = getIcon("Clock");
+                            return <ClockIcon className="w-6 h-6" />;
+                          })()}
                         </div>
                         <div className="space-y-2">
                           <h3 className="font-semibold">Business Hours</h3>
@@ -228,92 +230,45 @@ export default function ContactPage() {
           </div>
         </section>
 
-        {/* Support Stats */}
+        {/* Why Choose Us */}
         <section className="py-20 bg-muted/30">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
             <div className="text-center space-y-8 mb-16">
               <div className="space-y-4">
                 <Badge variant="secondary" className="text-sm">
-                  Our Support
+                  Why Choose Us
                 </Badge>
                 <h2 className="text-3xl sm:text-4xl font-bold">
-                  Why Choose Our Support?
+                  Trusted by Thousands
                 </h2>
                 <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                  We're committed to providing exceptional support to all our clients.
+                  We've helped businesses of all sizes navigate complex compliance requirements.
                 </p>
               </div>
             </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { icon: Clock, value: "24/7", label: "Support Available", desc: "Round the clock assistance" },
-                { icon: MessageSquare, value: "15min", label: "Response Time", desc: "Quick response guarantee" },
-                { icon: Users, value: "50+", label: "Expert Team", desc: "Certified professionals" },
-                { icon: Star, value: "4.9/5", label: "Customer Rating", desc: "Highly rated service" }
-              ].map((stat, index) => (
-                <Card key={index} className="text-center border-border/50 bg-card/50 backdrop-blur-sm">
-                  <CardContent className="p-6">
-                    <stat.icon className="w-8 h-8 mx-auto mb-3 text-primary" />
-                    <div className="text-2xl font-bold mb-1">{stat.value}</div>
-                    <div className="text-sm font-medium mb-2">{stat.label}</div>
-                    <div className="text-xs text-muted-foreground">{stat.desc}</div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* FAQ Section */}
-        <section className="py-20">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
-            <div className="text-center space-y-8 mb-16">
-              <div className="space-y-4">
-                <Badge variant="secondary" className="text-sm">
-                  FAQ
-                </Badge>
-                <h2 className="text-3xl sm:text-4xl font-bold">
-                  Frequently Asked Questions
-                </h2>
-                <p className="text-lg text-muted-foreground">
-                  Find answers to common questions about our services.
-                </p>
-              </div>
-            </div>
-            
-            <div className="space-y-6">
-              {[
-                {
-                  question: "How long does the registration process take?",
-                  answer: "Most registrations are completed within 7-15 business days, depending on the type of service and government processing times."
-                },
-                {
-                  question: "What documents do I need to provide?",
-                  answer: "Required documents vary by service type. Our team will provide a customized checklist based on your specific requirements."
-                },
-                {
-                  question: "Do you provide post-registration support?",
-                  answer: "Yes, we provide comprehensive post-registration support including compliance reminders and annual filing assistance."
-                },
-                {
-                  question: "What are your payment terms?",
-                  answer: "We offer flexible payment options including upfront payment, milestone-based payments, and EMI options for larger packages."
-                },
-                {
-                  question: "Is my data secure with you?",
-                  answer: "Absolutely. We use enterprise-grade security measures and comply with all data protection regulations to ensure your information is safe."
-                }
-              ].map((faq, index) => (
-                <Card key={index} className="border-border/50 bg-card/50 backdrop-blur-sm">
-                  <CardContent className="p-6">
-                    <div className="space-y-3">
-                      <h3 className="font-semibold text-lg">{faq.question}</h3>
-                      <p className="text-muted-foreground">{faq.answer}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                { icon: "Building2", title: "Expert Team", desc: "Certified professionals with years of experience", color: "bg-blue-500/10 text-blue-600" },
+                { icon: "Users", title: "10,000+ Clients", desc: "Successfully served businesses nationwide", color: "bg-green-500/10 text-green-600" },
+                { icon: "CheckCircle", title: "99% Success Rate", desc: "High success rate in all our services", color: "bg-purple-500/10 text-purple-600" },
+                { icon: "Star", title: "5-Star Rating", desc: "Consistently rated excellent by clients", color: "bg-orange-500/10 text-orange-600" }
+              ].map((feature, index) => {
+                const IconComponent = getIcon(feature.icon);
+                return (
+                  <Card key={index} className="border-border/50 bg-card/50 backdrop-blur-sm hover:shadow-lg transition-all duration-300">
+                    <CardContent className="p-6 text-center space-y-4">
+                      <div className={`w-12 h-12 rounded-lg flex items-center justify-center mx-auto ${feature.color}`}>
+                        <IconComponent className="w-6 h-6" />
+                      </div>
+                      <div className="space-y-2">
+                        <h3 className="font-semibold">{feature.title}</h3>
+                        <p className="text-sm text-muted-foreground">{feature.desc}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           </div>
         </section>

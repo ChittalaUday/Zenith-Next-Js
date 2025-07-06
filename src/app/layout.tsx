@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/components/utill/theme-provider";
+import { FloatingElementsWrapper } from "@/components/utill/floating-elements-wrapper";
 
 export const metadata: Metadata = {
   title: "Zenith Filings",
@@ -24,7 +25,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {" "}
+            <FloatingElementsWrapper />
             {children}
           </ThemeProvider>
         </body>

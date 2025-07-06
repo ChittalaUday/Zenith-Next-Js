@@ -4,7 +4,7 @@ import type { LucideIcon } from "lucide-react";
 
 export function getLucideIcon(iconName: string) {
     if (!iconName || typeof iconName !== 'string') {
-        return undefined;
+        return LucideIcons.HelpCircle; // Return placeholder icon
     }
 
     try {
@@ -43,10 +43,16 @@ export function getLucideIcon(iconName: string) {
             }
         }
 
-        return icon as LucideIcon | undefined;
+        // If still not found, return placeholder icon
+        if (!icon) {
+            console.warn(`Icon "${iconName}" not found, using placeholder icon`);
+            return LucideIcons.HelpCircle;
+        }
+
+        return icon as LucideIcon;
     } catch (error) {
         console.warn(`Failed to load icon "${iconName}":`, error);
-        return undefined;
+        return LucideIcons.HelpCircle; // Return placeholder icon
     }
 }
 

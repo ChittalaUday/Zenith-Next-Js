@@ -141,7 +141,6 @@ export function NavigationMenuItem({
 
             const newProps: any = {};
             if (typeof node.type !== "string") {
-              newProps.isHovered = isOpen;
               newProps.isMobile = true;
               newProps.onMobileToggle = handleMobileToggle;
               newProps.closeMobileMenu = closeMobileMenu;
@@ -154,7 +153,7 @@ export function NavigationMenuItem({
             // Filter out custom props when cloning to prevent them from reaching DOM elements
             if (shouldClone && typeof node.type === "string") {
               const props = node.props as any;
-              const { isHovered, isMobile, onMobileToggle, closeMobileMenu, ...domProps } = props;
+              const { isMobile, onMobileToggle, closeMobileMenu, ...domProps } = props;
               return React.cloneElement(node, domProps, nextChildren);
             }
             
@@ -178,7 +177,9 @@ export function NavigationMenuItem({
           if (!React.isValidElement(node)) return node;
 
           const newProps: any = {};
-          if (typeof node.type !== "string") {
+          // Pass isHovered only to components that explicitly need it.
+          const allowedTypes = new Set([NavigationMenuTrigger, NavigationMenuContent]);
+          if (allowedTypes.has(node.type as any)) {
             newProps.isHovered = isHovered;
           }
 
@@ -189,7 +190,7 @@ export function NavigationMenuItem({
           // Filter out custom props when cloning to prevent them from reaching DOM elements
           if (shouldClone && typeof node.type === "string") {
             const props = node.props as any;
-            const { isHovered, isMobile, onMobileToggle, closeMobileMenu, ...domProps } = props;
+            const { isMobile, onMobileToggle, closeMobileMenu, ...domProps } = props;
             return React.cloneElement(node, domProps, nextChildren);
           }
           
@@ -434,7 +435,7 @@ export function NavigationMenuLink({
         )}
       >
         <div className="flex items-center gap-3">
-          {IconComponent && (<IconComponent className="h-4 w-4" />)}
+          {IconComponent && <IconComponent className="h-4 w-4" />}
           {children}
         </div>
       </Component>
@@ -528,7 +529,7 @@ export function NavigationSubMenu({
           className="flex w-full items-center justify-between px-4 py-3 text-sm transition-colors rounded-md cursor-pointer hover:bg-accent/40 hover:text-accent-foreground focus:outline-none"
         >
           <div className="flex items-center gap-3">
-            {IconComponent && (<IconComponent className="h-4 w-4" />)}
+            {IconComponent && <IconComponent className="h-4 w-4" />}
             <LinkComponent {...(href && { href })} className="inline-flex items-center gap-1">
               <span>{trigger}</span>
             </LinkComponent>
@@ -577,8 +578,8 @@ export function NavigationSubMenu({
         <div className="flex items-center gap-3">
           {icon && (() => {
             try {
-              const IconComponentLocal = getIcon(icon) as LucideIcon | undefined;
-              return IconComponentLocal ? <IconComponentLocal className="h-4 w-4" /> : null;
+              const IconComponentLocal = getIcon(icon) as LucideIcon;
+              return <IconComponentLocal className="h-4 w-4" />;
             } catch (error) {
               console.warn(`Failed to load icon "${icon}":`, error);
               return null;

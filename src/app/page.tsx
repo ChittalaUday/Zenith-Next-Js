@@ -1,13 +1,11 @@
-import { NavBar } from "@/components/nav-bar";
-import { HeroSection } from "@/components/hero-section";
-import { ServicesSection } from "@/components/services-section";
-import { HowItWorksSection } from "@/components/how-it-works-section";
-import { TestimonialsSection } from "@/components/testimonials-section";
-import { CallToActionSection } from "@/components/call-to-action-section";
+import { HeroSection } from "@/components/home/hero-section";
+import { ServicesSection } from "@/components/home/services-section";
+import { HowItWorksSection } from "@/components/home/how-it-works-section";
+import { TestimonialsSection } from "@/components/home/testimonials-section";
+import { CallToActionSection } from "@/components/home/call-to-action-section";
+import { NavBar } from "@/components/home/nav-bar";
 import { FooterSection } from "@/components/footer-section";
-import { ParticleBackground } from "@/components/particle-background";
-import { FloatingElements } from "@/components/floating-elements";
-import { getIcon, getLucideIcon } from "@/lib/icons";
+import { ParticleBackground } from "@/components/utill/particle-background";
 
 export default function Home() {
 
@@ -31,9 +29,9 @@ export default function Home() {
       <div className="relative z-10">
         <ParticleBackground 
           particleCount={18} 
+          
           floatingElementsCount={6}
         />
-        <FloatingElements count={8} />
         <NavBar />
       
         <HeroSection />

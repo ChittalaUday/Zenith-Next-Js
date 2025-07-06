@@ -1,15 +1,14 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import * as LucideIcons from "lucide-react";
+import { getIcon } from "@/lib/icons";
 import { getColorByString } from "@/lib/color";
 import { serviceFaqs, serviceGuides } from "@/lib/faq-data";
-import { TestimonialsSection } from "@/components/testimonials-section";
-import { NavBar } from "@/components/nav-bar";
+import { TestimonialsSection } from "@/components/home/testimonials-section";
+import { NavBar } from "@/components/home/nav-bar";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { FooterSection } from "@/components/footer-section";
 
@@ -59,8 +58,7 @@ export default function SubServicePage() {
     return <div className="flex items-center justify-center min-h-[60vh]">Loading...</div>;
   }
 
-  const Icon = LucideIcons[parent.icon as keyof typeof LucideIcons] || LucideIcons["Folder"];
-  const LucideIcon = typeof Icon === "function" ? (Icon as React.ComponentType<any>) : null;
+  const Icon = getIcon(parent.icon);
   const subSlug = sub.title.toLowerCase().replace(/\s+/g, "-");
   const faqs = serviceFaqs[subSlug] || [];
   const guides = serviceGuides[subSlug] || [];
@@ -72,14 +70,17 @@ export default function SubServicePage() {
         {/* Unified Product Card */}
         <Card className="flex flex-col gap-6 p-8 shadow-lg border-border/60 bg-card/90 mb-10">
           <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-2">
-            <div className={`rounded-xl p-4 ${getColorByString(parent.title)}`}>{LucideIcon && <LucideIcon className="w-10 h-10" />}</div>
+            <div className={`rounded-xl p-4 ${getColorByString(parent.title)}`}>{Icon && <Icon className="w-10 h-10" />}</div>
             <div className="flex-1">
               <div className="flex flex-wrap items-center gap-2">
                 <h1 className="text-2xl font-bold">{sub.title}</h1>
                 <Badge variant="secondary" className={`px-3 py-1 ${getColorByString(sub.title)}`}>{sub.price}</Badge>
                 {sub.estimation && (
                   <Badge variant="outline" className="text-xs px-2 py-0.5 flex items-center gap-1">
-                    <LucideIcons.Clock className="w-4 h-4" />
+                    {(() => {
+                      const ClockIcon = getIcon("Clock");
+                      return <ClockIcon className="w-4 h-4" />;
+                    })()}
                     {sub.estimation}
                   </Badge>
                 )}
@@ -98,7 +99,10 @@ export default function SubServicePage() {
           <div className="flex flex-col gap-4 items-start">
             {sub.documents && sub.documents.length > 0 && (
               <div className="flex flex-col gap-1 w-full">
-                <span className="font-semibold text-base flex items-center gap-1 mb-1"><LucideIcons.FileText className="w-4 h-4" /> Documents Required:</span>
+                <span className="font-semibold text-base flex items-center gap-1 mb-1">{(() => {
+                  const FileTextIcon = getIcon("FileText");
+                  return <FileTextIcon className="w-4 h-4" />;
+                })()} Documents Required:</span>
                 <ul className="list-disc list-inside ml-2 text-sm text-muted-foreground">
                   {sub.documents.map((doc: string) => (
                     <li key={doc}>{doc}</li>
@@ -108,7 +112,10 @@ export default function SubServicePage() {
             )}
             {typeof sub.rating === "number" && (
               <div className="flex items-center gap-1 text-yellow-600 font-medium mt-2">
-                <LucideIcons.Star className="w-5 h-5 fill-yellow-400 text-yellow-400 mr-1" />
+                {(() => {
+                  const StarIcon = getIcon("Star");
+                  return <StarIcon className="w-5 h-5 fill-yellow-400 text-yellow-400 mr-1" />;
+                })()}
                 {sub.rating.toFixed(1)}
               </div>
             )}
@@ -130,7 +137,10 @@ export default function SubServicePage() {
             {faqs.length > 0 ? faqs.map((faq, idx) => (
               <AccordionItem value={`faq-${idx}`} key={idx}>
                 <AccordionTrigger className="text-base font-semibold flex items-center gap-2">
-                  <LucideIcons.HelpCircle className="w-5 h-5 text-primary" />
+                  {(() => {
+                    const HelpCircleIcon = getIcon("HelpCircle");
+                    return <HelpCircleIcon className="w-5 h-5 text-primary" />;
+                  })()}
                   {faq.question}
                   {faq.label && <Badge variant="secondary" className="ml-2 text-xs px-2 py-0.5">{faq.label}</Badge>}
                 </AccordionTrigger>
@@ -148,13 +158,19 @@ export default function SubServicePage() {
         <section className="mt-10">
           <Card className="p-6 shadow-lg border-border/60 bg-card/90">
             <div className="font-semibold text-lg mb-4 flex items-center gap-2">
-              <LucideIcons.BookOpen className="w-5 h-5 text-primary" />
+              {(() => {
+                const BookOpenIcon = getIcon("BookOpen");
+                return <BookOpenIcon className="w-5 h-5 text-primary" />;
+              })()}
               Related Guides
             </div>
             <ul className="flex flex-col gap-3">
               {guides.length > 0 ? guides.map((guide, idx) => (
                 <li key={idx} className="flex items-center gap-2">
-                  <LucideIcons.Link2 className="w-4 h-4 text-muted-foreground" />
+                  {(() => {
+                    const Link2Icon = getIcon("Link2");
+                    return <Link2Icon className="w-4 h-4 text-muted-foreground" />;
+                  })()}
                   <a href={guide.url} className="text-primary underline text-sm hover:text-primary/80 transition-colors">{guide.title}</a>
                   {guide.label && <Badge variant="outline" className="ml-2 text-xs px-2 py-0.5">{guide.label}</Badge>}
                 </li>

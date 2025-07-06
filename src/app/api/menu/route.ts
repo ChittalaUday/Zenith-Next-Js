@@ -113,14 +113,7 @@ const menuData: MenuItem[] = [
             { label: "Blog", href: "/blog" },
             { label: "Guides", href: "/blog#guides" },
             { label: "FAQs", href: "/contact#faq" },
-            {
-                label: "More Services",
-                icon: "MoreHorizontal",
-                subItems: [
-                    { label: "FSSAI License", href: "#" },
-                    { label: "MSME Registration", href: "#" },
-                ],
-            },
+
             {
                 label: "Video Tutorials",
                 icon: "Video",

@@ -4,7 +4,7 @@ import React from "react";
 import { AnimatedCard, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge, type BadgeProps } from "@/components/ui/badge";
-import { Briefcase, FileText, Landmark, BadgeCheck, Receipt, Banknote, Users,ShieldCheck  } from "lucide-react";
+import { Briefcase, FileText, Landmark, BadgeCheck, Receipt, Banknote, Users, ShieldCheck } from "lucide-react";
 
 interface Service {
   title: string;
@@ -89,7 +89,7 @@ export function ServicesSection() {
             <AnimatedCard key={i} className="flex flex-col items-start group">
               <CardHeader>
                 <Badge variant={service.badge} className={`mb-2 p-2 flex items-center justify-center size-12 ${service.color} transition-all duration-300 group-hover:shadow-lg group-hover:ring-2 group-hover:ring-primary/40`}>
-                  {IconComponent && <IconComponent className="size-8 drop-shadow transition-all duration-300 group-hover:scale-125 group-hover:rotate-12" />}
+                  <IconComponent className="size-8 drop-shadow transition-all duration-300 group-hover:scale-125 group-hover:rotate-12" />
                 </Badge>
                 <CardTitle className="mt-2 text-lg md:text-md font-bold">{service.title}</CardTitle>
               </CardHeader>

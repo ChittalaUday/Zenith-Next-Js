@@ -61,19 +61,19 @@ const dashboardData: DashboardData = {
     ],
     navMain: [
         {
-            title: "Dashboard",
-            url: "/dashboard",
-            icon: "PanelRightDashed",
+            title: "Analytics",
+            url: "/dashboard/analytics",
+            icon: "ChartNoAxesGantt",
             isActive: false,
         },
         {
-            title: "Users",
-            url: "#",
+            title: "Users Managment",
+            url: "/dashboard/users",
             icon: "Users",
             items: [
                 {
-                    title: "Admin",
-                    url: "#",
+                    title: "Users",
+                    url: "/dashboard/users",
                 },
                 {
                     title: "Staff",
@@ -87,11 +87,11 @@ const dashboardData: DashboardData = {
         },
         {
             title: "Tasks",
-            url: "#",
+            url: "/dashboard/tasks",
             icon: "Library",
             items: [
                 {
-                    title: "Introduction",
+                    title: "Clients Request",
                     url: "#",
                 },
                 {
@@ -110,19 +110,19 @@ const dashboardData: DashboardData = {
         },
         {
             title: "Content Management",
-            url: "#",
+            url: "/dashboard/content-management",
             icon: "ChartNoAxesGantt",
             items: [
                 {
-                    title: "About",
-                    url: "/about",
+                    title: "Content",
+                    url: "/dashboard/content",
                 },
                 {
-                    title: "Get Started",
-                    url: "#",
+                    title: "Testimonials",
+                    url: "/dashboard/content/testimonials",
                 },
                 {
-                    title: "Tutorials",
+                    title: "FAQs",
                     url: "#",
                 },
                 {
@@ -133,26 +133,9 @@ const dashboardData: DashboardData = {
         },
         {
             title: "Settings",
-            url: "#",
+            url: "/dashboard/settings",
             icon: "Settings2",
-            items: [
-                {
-                    title: "General",
-                    url: "#",
-                },
-                {
-                    title: "Team",
-                    url: "#",
-                },
-                {
-                    title: "Billing",
-                    url: "#",
-                },
-                {
-                    title: "Limits",
-                    url: "#",
-                },
-            ],
+            isActive: false,
         },
     ],
     projects: [

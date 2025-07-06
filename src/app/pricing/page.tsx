@@ -1,13 +1,57 @@
-import { NavBar } from "@/components/nav-bar";
+import { NavBar } from "@/components/home/nav-bar";
 import { FooterSection } from "@/components/footer-section";
-import { ParticleBackground } from "@/components/particle-background";
-import { FloatingElements } from "@/components/floating-elements";
+import { ParticleBackground } from "@/components/utill/particle-background";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Check, X, Star, Zap, Shield, Users } from "lucide-react";
+import { Check, X } from "lucide-react";
+import { getIcon } from "@/lib/icons";
+import { getColorByString } from "@/lib/color";
 
-export default function PricingPage() {
+// Types for API data
+interface ServicePricing {
+  icon: string;
+  title: string;
+  price: string;
+  description: string;
+  features: string[];
+}
+
+interface PlanFeature {
+  included: boolean;
+  text: string;
+}
+
+interface PlanPricing {
+  name: string;
+  price: string;
+  period: string;
+  description: string;
+  popular?: boolean;
+  features: PlanFeature[];
+}
+
+// Fetch data from APIs
+async function getServicePricing(): Promise<ServicePricing[]> {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/pricing/services`, {
+    cache: 'no-store'
+  });
+  const data = await response.json();
+  return data.data;
+}
+
+async function getPlanPricing(): Promise<PlanPricing[]> {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/pricing/plans`, {
+    cache: 'no-store'
+  });
+  const data = await response.json();
+  return data.data;
+}
+
+export default async function PricingPage() {
+  const servicePricing = await getServicePricing();
+  const planPricing = await getPlanPricing();
+
   return (
     <div className="relative min-h-screen bg-background">
       {/* Glow Background */}
@@ -25,7 +69,6 @@ export default function PricingPage() {
           particleCount={8} 
           floatingElementsCount={3}
         />
-        <FloatingElements count={4} />
         <NavBar />
         
         {/* Hero Section */}
@@ -72,163 +115,53 @@ export default function PricingPage() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               
-              {/* Basic Plan */}
-              <Card className="border-border/50 bg-card/50 backdrop-blur-sm relative">
-                <CardHeader className="text-center pb-8">
-                  <Badge variant="outline" className="w-fit mx-auto mb-4">
-                    Basic
-                  </Badge>
-                  <CardTitle className="text-3xl font-bold">₹2,999</CardTitle>
-                  <CardDescription className="text-muted-foreground">
-                    per month
-                  </CardDescription>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    Perfect for startups and small businesses
-                  </p>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <Check className="w-5 h-5 text-green-600" />
-                      <span className="text-sm">Business Registration</span>
+              {planPricing.map((plan, index) => (
+                <Card 
+                  key={index} 
+                  className={`border-border/50 bg-card/50 backdrop-blur-sm relative ${
+                    plan.popular ? 'border-primary/50 scale-105' : ''
+                  }`}
+                >
+                  {plan.popular && (
+                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                      <Badge className="bg-primary text-primary-foreground">
+                        Most Popular
+                      </Badge>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <Check className="w-5 h-5 text-green-600" />
-                      <span className="text-sm">GST Registration</span>
+                  )}
+                  <CardHeader className="text-center pb-8">
+                    <Badge variant="outline" className="w-fit mx-auto mb-4">
+                      {plan.name}
+                    </Badge>
+                    <CardTitle className="text-3xl font-bold">{plan.price}</CardTitle>
+                    <CardDescription className="text-muted-foreground">
+                      {plan.period}
+                    </CardDescription>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      {plan.description}
+                    </p>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div className="space-y-4">
+                      {plan.features.map((feature, featureIndex) => (
+                        <div key={featureIndex} className="flex items-center gap-3">
+                          {feature.included ? (
+                            <Check className="w-5 h-5 text-green-600" />
+                          ) : (
+                            <X className="w-5 h-5 text-red-500" />
+                          )}
+                          <span className={`text-sm ${!feature.included ? 'text-muted-foreground' : ''}`}>
+                            {feature.text}
+                          </span>
+                        </div>
+                      ))}
                     </div>
-                    <div className="flex items-center gap-3">
-                      <Check className="w-5 h-5 text-green-600" />
-                      <span className="text-sm">Basic Compliance Support</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Check className="w-5 h-5 text-green-600" />
-                      <span className="text-sm">Email Support</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Check className="w-5 h-5 text-green-600" />
-                      <span className="text-sm">Document Templates</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <X className="w-5 h-5 text-red-500" />
-                      <span className="text-sm text-muted-foreground">Priority Support</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <X className="w-5 h-5 text-red-500" />
-                      <span className="text-sm text-muted-foreground">Compliance Monitoring</span>
-                    </div>
-                  </div>
-                  <Button className="w-full" variant="outline">
-                    Get Started
-                  </Button>
-                </CardContent>
-              </Card>
-
-              {/* Professional Plan */}
-              <Card className="border-primary/50 bg-card/50 backdrop-blur-sm relative scale-105">
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <Badge className="bg-primary text-primary-foreground">
-                    Most Popular
-                  </Badge>
-                </div>
-                <CardHeader className="text-center pb-8">
-                  <Badge variant="outline" className="w-fit mx-auto mb-4">
-                    Professional
-                  </Badge>
-                  <CardTitle className="text-3xl font-bold">₹5,999</CardTitle>
-                  <CardDescription className="text-muted-foreground">
-                    per month
-                  </CardDescription>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    Ideal for growing businesses
-                  </p>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <Check className="w-5 h-5 text-green-600" />
-                      <span className="text-sm">Everything in Basic</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Check className="w-5 h-5 text-green-600" />
-                      <span className="text-sm">Trademark Registration</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Check className="w-5 h-5 text-green-600" />
-                      <span className="text-sm">ISO Certification</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Check className="w-5 h-5 text-green-600" />
-                      <span className="text-sm">Priority Support</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Check className="w-5 h-5 text-green-600" />
-                      <span className="text-sm">Compliance Monitoring</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Check className="w-5 h-5 text-green-600" />
-                      <span className="text-sm">Quarterly Reviews</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Check className="w-5 h-5 text-green-600" />
-                      <span className="text-sm">Legal Consultation</span>
-                    </div>
-                  </div>
-                  <Button className="w-full">
-                    Get Started
-                  </Button>
-                </CardContent>
-              </Card>
-
-              {/* Enterprise Plan */}
-              <Card className="border-border/50 bg-card/50 backdrop-blur-sm relative">
-                <CardHeader className="text-center pb-8">
-                  <Badge variant="outline" className="w-fit mx-auto mb-4">
-                    Enterprise
-                  </Badge>
-                  <CardTitle className="text-3xl font-bold">₹12,999</CardTitle>
-                  <CardDescription className="text-muted-foreground">
-                    per month
-                  </CardDescription>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    For large corporations and enterprises
-                  </p>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <Check className="w-5 h-5 text-green-600" />
-                      <span className="text-sm">Everything in Professional</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Check className="w-5 h-5 text-green-600" />
-                      <span className="text-sm">Dedicated Account Manager</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Check className="w-5 h-5 text-green-600" />
-                      <span className="text-sm">24/7 Phone Support</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Check className="w-5 h-5 text-green-600" />
-                      <span className="text-sm">Custom Compliance Solutions</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Check className="w-5 h-5 text-green-600" />
-                      <span className="text-sm">Monthly Reports</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Check className="w-5 h-5 text-green-600" />
-                      <span className="text-sm">Risk Assessment</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Check className="w-5 h-5 text-green-600" />
-                      <span className="text-sm">Audit Support</span>
-                    </div>
-                  </div>
-                  <Button className="w-full" variant="outline">
-                    Contact Sales
-                  </Button>
-                </CardContent>
-              </Card>
+                    <Button className="w-full" variant={plan.popular ? "default" : "outline"}>
+                      {plan.name === "Enterprise" ? "Contact Sales" : "Get Started"}
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           </div>
         </section>
@@ -251,127 +184,91 @@ export default function PricingPage() {
             </div>
             
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[
-                {
-                  icon: Shield,
-                  title: "Business Registration",
-                  price: "₹1,999",
-                  description: "Complete business registration including PAN, TAN, and bank account setup",
-                  features: ["PAN Application", "TAN Registration", "Bank Account Setup", "Digital Signature"]
-                },
-                {
-                  icon: Zap,
-                  title: "GST Registration",
-                  price: "₹999",
-                  description: "Quick and hassle-free GST registration for your business",
-                  features: ["GST Application", "Document Verification", "Registration Certificate", "GST Training"]
-                },
-                {
-                  icon: Star,
-                  title: "Trademark Registration",
-                  price: "₹6,999",
-                  description: "Protect your brand with comprehensive trademark registration",
-                  features: ["Trademark Search", "Application Filing", "Response Handling", "Registration Certificate"]
-                },
-                {
-                  icon: Users,
-                  title: "ISO Certification",
-                  price: "₹15,999",
-                  description: "Achieve international quality standards with ISO certification",
-                  features: ["Gap Analysis", "Documentation", "Audit Support", "Certification"]
-                },
-                {
-                  icon: Shield,
-                  title: "Compliance Monitoring",
-                  price: "₹2,999",
-                  description: "Stay compliant with regular monitoring and updates",
-                  features: ["Monthly Reports", "Deadline Alerts", "Compliance Updates", "Expert Consultation"]
-                },
-                {
-                  icon: Star,
-                  title: "Legal Consultation",
-                  price: "₹1,999",
-                  description: "Get expert legal advice for your business needs",
-                  features: ["1-on-1 Consultation", "Legal Document Review", "Compliance Advice", "Follow-up Support"]
-                }
-              ].map((service, index) => (
-                <Card key={index} className="border-border/50 bg-card/50 backdrop-blur-sm hover:shadow-lg transition-all duration-300">
-                  <CardHeader className="text-center">
-                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-                      <service.icon className="w-6 h-6 text-primary" />
-                    </div>
-                    <CardTitle className="text-xl">{service.title}</CardTitle>
-                    <div className="text-3xl font-bold text-primary">{service.price}</div>
-                    <CardDescription>{service.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="space-y-3">
-                      {service.features.map((feature, featureIndex) => (
-                        <div key={featureIndex} className="flex items-center gap-3">
-                          <Check className="w-4 h-4 text-green-600" />
-                          <span className="text-sm">{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-                    <Button className="w-full" variant="outline">
-                      Get Started
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
+              {servicePricing.map((service, index) => {
+                const IconComponent = getIcon(service.icon);
+                return (
+                  <Card key={index} className="border-border/50 bg-card/50 backdrop-blur-sm hover:shadow-lg transition-all duration-300">
+                    <CardHeader className="text-center">
+                      <div className={`w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-4 ${getColorByString(service.title)}`}>
+                        <IconComponent className="w-6 h-6" />
+                      </div>
+                      <CardTitle className="text-xl">{service.title}</CardTitle>
+                      <CardDescription className="text-muted-foreground">
+                        {service.description}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      <div className="text-center">
+                        <div className="text-3xl font-bold">{service.price}</div>
+                        <p className="text-sm text-muted-foreground">One-time fee</p>
+                      </div>
+                      
+                      <div className="space-y-3">
+                        <h4 className="font-semibold text-sm">What's included:</h4>
+                        <ul className="space-y-2 text-sm text-muted-foreground">
+                          {service.features.map((feature, featureIndex) => (
+                            <li key={featureIndex} className="flex items-center gap-2">
+                              <Check className="w-4 h-4 text-green-600 flex-shrink-0" />
+                              {feature}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      
+                      <Button className="w-full">
+                        Get Started
+                        {(() => {
+                          const ArrowRightIcon = getIcon("ArrowRight");
+                          return <ArrowRightIcon className="w-4 h-4 ml-2" />;
+                        })()}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           </div>
         </section>
 
-        {/* FAQ Section */}
+        {/* Features Comparison */}
         <section className="py-20">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
             <div className="text-center space-y-8 mb-16">
               <div className="space-y-4">
                 <Badge variant="secondary" className="text-sm">
-                  FAQ
+                  Compare Plans
                 </Badge>
                 <h2 className="text-3xl sm:text-4xl font-bold">
-                  Pricing Questions
+                  Feature Comparison
                 </h2>
-                <p className="text-lg text-muted-foreground">
-                  Common questions about our pricing and services.
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                  See how our different plans stack up against each other.
                 </p>
               </div>
             </div>
             
-            <div className="space-y-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                {
-                  question: "Are there any hidden fees?",
-                  answer: "No, our pricing is completely transparent. All fees are clearly listed and there are no hidden charges."
-                },
-                {
-                  question: "Can I change my plan later?",
-                  answer: "Yes, you can upgrade or downgrade your plan at any time. Changes will be reflected in your next billing cycle."
-                },
-                {
-                  question: "Do you offer refunds?",
-                  answer: "We offer a 30-day money-back guarantee for all our services. If you're not satisfied, we'll refund your payment."
-                },
-                {
-                  question: "What payment methods do you accept?",
-                  answer: "We accept all major credit cards, debit cards, UPI, net banking, and digital wallets."
-                },
-                {
-                  question: "Is there a setup fee?",
-                  answer: "No setup fees for any of our plans. You only pay the advertised monthly or yearly subscription fee."
-                }
-              ].map((faq, index) => (
-                <Card key={index} className="border-border/50 bg-card/50 backdrop-blur-sm">
-                  <CardContent className="p-6">
-                    <div className="space-y-3">
-                      <h3 className="font-semibold text-lg">{faq.question}</h3>
-                      <p className="text-muted-foreground">{faq.answer}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                { icon: "Shield", title: "Security & Compliance", desc: "Enterprise-grade security measures", color: "bg-blue-500/10 text-blue-600" },
+                { icon: "Users", title: "Dedicated Support", desc: "24/7 expert assistance available", color: "bg-green-500/10 text-green-600" },
+                { icon: "Zap", title: "Fast Processing", desc: "Quick turnaround times guaranteed", color: "bg-purple-500/10 text-purple-600" },
+                { icon: "Star", title: "Premium Features", desc: "Advanced tools and analytics", color: "bg-orange-500/10 text-orange-600" }
+              ].map((feature, index) => {
+                const IconComponent = getIcon(feature.icon);
+                return (
+                  <Card key={index} className="border-border/50 bg-card/50 backdrop-blur-sm hover:shadow-lg transition-all duration-300">
+                    <CardContent className="p-6 text-center space-y-4">
+                      <div className={`w-12 h-12 rounded-lg flex items-center justify-center mx-auto ${feature.color}`}>
+                        <IconComponent className="w-6 h-6" />
+                      </div>
+                      <div className="space-y-2">
+                        <h3 className="font-semibold">{feature.title}</h3>
+                        <p className="text-sm text-muted-foreground">{feature.desc}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -381,36 +278,32 @@ export default function PricingPage() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
             <div className="text-center space-y-8">
               <div className="space-y-4">
+                <Badge variant="secondary" className="text-sm">
+                  Ready to Start?
+                </Badge>
                 <h2 className="text-3xl sm:text-4xl font-bold">
-                  Ready to Get Started?
+                  Get Started Today
                 </h2>
                 <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                  Choose the plan that's right for your business and start your compliance journey today.
+                  Choose the perfect plan for your business and start your compliance journey with confidence.
                 </p>
               </div>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="text-base font-semibold">
-                  Start Free Trial
+                <Button size="lg">
+                  View All Plans
+                  {(() => {
+                    const ArrowRightIcon = getIcon("ArrowRight");
+                    return <ArrowRightIcon className="w-4 h-4 ml-2" />;
+                  })()}
                 </Button>
-                <Button variant="outline" size="lg" className="text-base font-semibold">
-                  Schedule a Demo
+                <Button variant="outline" size="lg">
+                  Contact Sales
+                  {(() => {
+                    const MessageSquareIcon = getIcon("MessageSquare");
+                    return <MessageSquareIcon className="w-4 h-4 ml-2" />;
+                  })()}
                 </Button>
-              </div>
-              
-              <div className="flex items-center justify-center gap-8 text-sm text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-green-600" />
-                  <span>30-day free trial</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-green-600" />
-                  <span>No credit card required</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-green-600" />
-                  <span>Cancel anytime</span>
-                </div>
               </div>
             </div>
           </div>

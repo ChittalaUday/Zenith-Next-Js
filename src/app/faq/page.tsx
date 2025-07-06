@@ -1,22 +1,14 @@
-import { NavBar } from "@/components/nav-bar";
-import { FooterSection } from "@/components/footer-section";
-import { ParticleBackground } from "@/components/particle-background";
-import { FloatingElements } from "@/components/floating-elements";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { 
-  Search, 
-  HelpCircle, 
-  CheckCircle, 
-  Clock, 
-  Shield, 
-  Users,
-  FileText,
-  Star,
-  ArrowRight
-} from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { getIcon } from "@/lib/icons";
+import { getColorByString } from "@/lib/color";
+import { NavBar } from "@/components/home/nav-bar";
+import { FooterSection } from "@/components/footer-section";
+import { ParticleBackground } from "@/components/utill/particle-background";
+
 
 export default function FAQPage() {
   return (
@@ -36,7 +28,6 @@ export default function FAQPage() {
           particleCount={8} 
           floatingElementsCount={3}
         />
-        <FloatingElements count={4} />
         <NavBar />
         
         {/* Hero Section */}
@@ -59,7 +50,10 @@ export default function FAQPage() {
               {/* Search Bar */}
               <div className="max-w-2xl mx-auto">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                  {(() => {
+                    const SearchIcon = getIcon("Search");
+                    return <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />;
+                  })()}
                   <Input 
                     placeholder="Search for questions..." 
                     className="pl-10 h-12 text-base"
@@ -89,23 +83,26 @@ export default function FAQPage() {
             
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
               {[
-                { icon: FileText, title: "Registration", count: "15 questions", color: "bg-blue-500/10 text-blue-600" },
-                { icon: Shield, title: "Compliance", count: "12 questions", color: "bg-green-500/10 text-green-600" },
-                { icon: Users, title: "Support", count: "8 questions", color: "bg-purple-500/10 text-purple-600" },
-                { icon: Star, title: "General", count: "10 questions", color: "bg-orange-500/10 text-orange-600" }
-              ].map((category, index) => (
-                <Card key={index} className="border-border/50 bg-card/50 backdrop-blur-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
-                  <CardContent className="p-6 text-center space-y-4">
-                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center mx-auto ${category.color}`}>
-                      <category.icon className="w-6 h-6" />
-                    </div>
-                    <div className="space-y-2">
-                      <h3 className="font-semibold">{category.title}</h3>
-                      <p className="text-sm text-muted-foreground">{category.count}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                { icon: "FileText", title: "Registration", count: "15 questions", color: "bg-blue-500/10 text-blue-600" },
+                { icon: "Shield", title: "Compliance", count: "12 questions", color: "bg-green-500/10 text-green-600" },
+                { icon: "Users", title: "Support", count: "8 questions", color: "bg-purple-500/10 text-purple-600" },
+                { icon: "Star", title: "General", count: "10 questions", color: "bg-orange-500/10 text-orange-600" }
+              ].map((category, index) => {
+                const IconComponent = getIcon(category.icon);
+                return (
+                  <Card key={index} className="border-border/50 bg-card/50 backdrop-blur-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                    <CardContent className="p-6 text-center space-y-4">
+                      <div className={`w-12 h-12 rounded-lg flex items-center justify-center mx-auto ${category.color}`}>
+                        <IconComponent className="w-6 h-6" />
+                      </div>
+                      <div className="space-y-2">
+                        <h3 className="font-semibold">{category.title}</h3>
+                        <p className="text-sm text-muted-foreground">{category.count}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
             
             {/* FAQ Sections */}
@@ -117,7 +114,7 @@ export default function FAQPage() {
                   <p className="text-muted-foreground">Common questions about business registration services</p>
                 </div>
                 
-                <div className="grid gap-6">
+                <Accordion type="single" collapsible className="w-full space-y-4">
                   {[
                     {
                       question: "How long does the registration process take?",
@@ -140,19 +137,24 @@ export default function FAQPage() {
                       answer: "Yes, we provide comprehensive post-registration support including compliance reminders, annual filing assistance, and ongoing consultation for your business needs."
                     }
                   ].map((faq, index) => (
-                    <Card key={index} className="border-border/50 bg-card/50 backdrop-blur-sm">
-                      <CardContent className="p-6">
-                        <div className="space-y-3">
-                          <h4 className="font-semibold text-lg flex items-start gap-3">
-                            <HelpCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                            {faq.question}
-                          </h4>
-                          <p className="text-muted-foreground pl-8">{faq.answer}</p>
+                    <AccordionItem key={index} value={`registration-${index}`} className="border-border/50 bg-card/50 backdrop-blur-sm rounded-lg px-6">
+                      <AccordionTrigger className="text-left font-semibold text-lg hover:no-underline">
+                        <div className="flex items-start gap-3">
+                          <div className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center ${getColorByString("Registration")}`}>
+                            {(() => {
+                              const HelpCircleIcon = getIcon("HelpCircle");
+                              return <HelpCircleIcon className="w-4 h-4" />;
+                            })()}
+                          </div>
+                          {faq.question}
                         </div>
-                      </CardContent>
-                    </Card>
+                      </AccordionTrigger>
+                      <AccordionContent className="text-muted-foreground pl-11">
+                        {faq.answer}
+                      </AccordionContent>
+                    </AccordionItem>
                   ))}
-                </div>
+                </Accordion>
               </div>
 
               {/* Compliance FAQs */}
@@ -162,7 +164,7 @@ export default function FAQPage() {
                   <p className="text-muted-foreground">Questions about ongoing compliance and regulatory requirements</p>
                 </div>
                 
-                <div className="grid gap-6">
+                <Accordion type="single" collapsible className="w-full space-y-4">
                   {[
                     {
                       question: "What are the annual compliance requirements?",
@@ -185,19 +187,24 @@ export default function FAQPage() {
                       answer: "Our team continuously monitors regulatory updates and government notifications. We immediately inform clients about any changes that affect their business."
                     }
                   ].map((faq, index) => (
-                    <Card key={index} className="border-border/50 bg-card/50 backdrop-blur-sm">
-                      <CardContent className="p-6">
-                        <div className="space-y-3">
-                          <h4 className="font-semibold text-lg flex items-start gap-3">
-                            <HelpCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                            {faq.question}
-                          </h4>
-                          <p className="text-muted-foreground pl-8">{faq.answer}</p>
+                    <AccordionItem key={index} value={`compliance-${index}`} className="border-border/50 bg-card/50 backdrop-blur-sm rounded-lg px-6">
+                      <AccordionTrigger className="text-left font-semibold text-lg hover:no-underline">
+                        <div className="flex items-start gap-3">
+                          <div className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center ${getColorByString("Compliance")}`}>
+                            {(() => {
+                              const ShieldIcon = getIcon("Shield");
+                              return <ShieldIcon className="w-4 h-4" />;
+                            })()}
+                          </div>
+                          {faq.question}
                         </div>
-                      </CardContent>
-                    </Card>
+                      </AccordionTrigger>
+                      <AccordionContent className="text-muted-foreground pl-11">
+                        {faq.answer}
+                      </AccordionContent>
+                    </AccordionItem>
                   ))}
-                </div>
+                </Accordion>
               </div>
 
               {/* Support FAQs */}
@@ -207,83 +214,133 @@ export default function FAQPage() {
                   <p className="text-muted-foreground">Questions about our support services and customer care</p>
                 </div>
                 
-                <div className="grid gap-6">
+                <Accordion type="single" collapsible className="w-full space-y-4">
                   {[
                     {
                       question: "What are your support hours?",
-                      answer: "We provide 24/7 email support and phone support during business hours (9 AM - 6 PM, Monday to Saturday). Enterprise clients get dedicated account managers with extended support."
+                      answer: "Our support team is available Monday to Friday from 9:00 AM to 6:00 PM IST. For urgent matters, we also provide emergency support during business hours."
                     },
                     {
-                      question: "How quickly do you respond to queries?",
-                      answer: "We aim to respond to all queries within 2-4 hours during business hours. Urgent matters are prioritized and addressed immediately."
+                      question: "How can I contact your support team?",
+                      answer: "You can reach our support team through multiple channels: phone, email, live chat on our website, or through our client portal. We typically respond within 2-4 hours during business hours."
                     },
                     {
-                      question: "Can I speak to a specific expert?",
-                      answer: "Yes, you can request to speak with specific experts based on your service requirements. We'll connect you with the most qualified professional for your needs."
+                      question: "Do you provide remote assistance?",
+                      answer: "Yes, we provide remote assistance for document preparation, form filling, and other services that can be handled digitally. We use secure platforms for all remote interactions."
                     },
                     {
-                      question: "Do you provide online consultation?",
-                      answer: "Yes, we offer video consultations and online meetings for your convenience. This is especially useful for clients who cannot visit our office."
+                      question: "What is your response time for support queries?",
+                      answer: "We aim to respond to all support queries within 2-4 hours during business hours. For urgent matters, we provide priority support with faster response times."
                     },
                     {
-                      question: "What languages do you support?",
-                      answer: "We provide support in English, Hindi, and several regional languages to ensure effective communication with all our clients."
+                      question: "Do you offer training for new clients?",
+                      answer: "Yes, we provide comprehensive onboarding and training sessions for new clients to help them understand our processes, tools, and how to work effectively with our team."
                     }
                   ].map((faq, index) => (
-                    <Card key={index} className="border-border/50 bg-card/50 backdrop-blur-sm">
-                      <CardContent className="p-6">
-                        <div className="space-y-3">
-                          <h4 className="font-semibold text-lg flex items-start gap-3">
-                            <HelpCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                            {faq.question}
-                          </h4>
-                          <p className="text-muted-foreground pl-8">{faq.answer}</p>
+                    <AccordionItem key={index} value={`support-${index}`} className="border-border/50 bg-card/50 backdrop-blur-sm rounded-lg px-6">
+                      <AccordionTrigger className="text-left font-semibold text-lg hover:no-underline">
+                        <div className="flex items-start gap-3">
+                          <div className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center ${getColorByString("Support")}`}>
+                            {(() => {
+                              const UsersIcon = getIcon("Users");
+                              return <UsersIcon className="w-4 h-4" />;
+                            })()}
+                          </div>
+                          {faq.question}
                         </div>
-                      </CardContent>
-                    </Card>
+                      </AccordionTrigger>
+                      <AccordionContent className="text-muted-foreground pl-11">
+                        {faq.answer}
+                      </AccordionContent>
+                    </AccordionItem>
                   ))}
+                </Accordion>
+              </div>
+
+              {/* General FAQs */}
+              <div className="space-y-8">
+                <div className="text-center space-y-4">
+                  <h3 className="text-2xl font-bold">General Questions</h3>
+                  <p className="text-muted-foreground">General questions about our company and services</p>
                 </div>
+                
+                <Accordion type="single" collapsible className="w-full space-y-4">
+                  {[
+                    {
+                      question: "How long has your company been in business?",
+                      answer: "We have been serving businesses for over 8 years, helping thousands of companies with their compliance and registration needs. Our experience spans across various industries and business types."
+                    },
+                    {
+                      question: "What makes your services different from competitors?",
+                      answer: "Our services stand out due to our personalized approach, advanced technology platform, comprehensive support, and deep expertise in Indian business regulations. We also provide ongoing compliance management."
+                    },
+                    {
+                      question: "Do you work with international clients?",
+                      answer: "Yes, we work with international clients who want to establish or maintain business operations in India. We provide specialized services for foreign companies and NRIs."
+                    },
+                    {
+                      question: "What is your success rate?",
+                      answer: "We maintain a 99% success rate across all our services. Our high success rate is due to our thorough understanding of regulations, attention to detail, and proactive approach to compliance."
+                    },
+                    {
+                      question: "Do you provide references from past clients?",
+                      answer: "Yes, we can provide references from satisfied clients upon request. We also have numerous testimonials and case studies available on our website."
+                    }
+                  ].map((faq, index) => (
+                    <AccordionItem key={index} value={`general-${index}`} className="border-border/50 bg-card/50 backdrop-blur-sm rounded-lg px-6">
+                      <AccordionTrigger className="text-left font-semibold text-lg hover:no-underline">
+                        <div className="flex items-start gap-3">
+                          <div className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center ${getColorByString("General")}`}>
+                            {(() => {
+                              const StarIcon = getIcon("Star");
+                              return <StarIcon className="w-4 h-4" />;
+                            })()}
+                          </div>
+                          {faq.question}
+                        </div>
+                      </AccordionTrigger>
+                      <AccordionContent className="text-muted-foreground pl-11">
+                        {faq.answer}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Still Have Questions */}
+        {/* Contact CTA */}
         <section className="py-20 bg-muted/30">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
             <div className="text-center space-y-8">
               <div className="space-y-4">
-                <h2 className="text-3xl sm:text-4xl font-bold">
+                <Badge variant="secondary" className="text-sm">
                   Still Have Questions?
+                </Badge>
+                <h2 className="text-3xl sm:text-4xl font-bold">
+                  Can't Find What You're Looking For?
                 </h2>
                 <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                  Can't find what you're looking for? Our expert team is here to help.
+                  Our expert team is here to help. Contact us for personalized assistance with your specific questions.
                 </p>
               </div>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="text-base font-semibold">
+                <Button size="lg">
                   Contact Support
-                  <ArrowRight className="w-4 h-4 ml-2" />
+                  {(() => {
+                    const MessageSquareIcon = getIcon("MessageSquare");
+                    return <MessageSquareIcon className="w-4 h-4 ml-2" />;
+                  })()}
                 </Button>
-                <Button variant="outline" size="lg" className="text-base font-semibold">
-                  Schedule a Call
+                <Button variant="outline" size="lg">
+                  Schedule Consultation
+                  {(() => {
+                    const CalendarIcon = getIcon("Calendar");
+                    return <CalendarIcon className="w-4 h-4 ml-2" />;
+                  })()}
                 </Button>
-              </div>
-              
-              <div className="flex items-center justify-center gap-8 text-sm text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-green-600" />
-                  <span>24/7 Support</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Users className="w-4 h-4 text-green-600" />
-                  <span>Expert Team</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Shield className="w-4 h-4 text-green-600" />
-                  <span>Secure & Confidential</span>
-                </div>
               </div>
             </div>
           </div>

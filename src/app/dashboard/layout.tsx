@@ -1,8 +1,6 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Separator } from "@radix-ui/react-separator";
-import { DynamicBreadcrumb } from "@/components/dynamic-breadcrumb";
+import { AppSidebar } from "@/components/nav/app-sidebar";
+import { StickyHeader } from "@/components/dashboard/sticky-header";
 
 export default function RootLayout({
   children,
@@ -11,15 +9,11 @@ export default function RootLayout({
 }>) {
   return (
     <SidebarProvider>
-      <div className="flex h-screen">
+      <div className="flex h-screen w-full">
         <AppSidebar />
-        <div className="flex-1 flex flex-col">
-          <header className="flex h-16 items-center gap-2 px-4">
-            <SidebarTrigger />
-            <Separator orientation="vertical" className="mr-2 h-4" />
-            <DynamicBreadcrumb />
-          </header>
-          <main className="flex-1">
+        <div className="flex-1 flex flex-col w-full">
+          <StickyHeader />
+          <main className="flex-1 w-full overflow-auto">
             {children}
           </main>
         </div>

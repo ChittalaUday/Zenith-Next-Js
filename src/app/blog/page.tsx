@@ -1,27 +1,12 @@
-import { NavBar } from "@/components/nav-bar";
-import { FooterSection } from "@/components/footer-section";
-import { ParticleBackground } from "@/components/particle-background";
-import { FloatingElements } from "@/components/floating-elements";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { 
-  Search, 
-  Calendar, 
-  Clock, 
-  User, 
-  ArrowRight, 
-  BookOpen,
-  TrendingUp,
-  Shield,
-  Zap,
-  Building2,
-  FileText,
-  Star,
-  Check
-} from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { getIcon } from "@/lib/icons";
+import { NavBar } from "@/components/home/nav-bar";
+import { FooterSection } from "@/components/footer-section";
+import { ParticleBackground } from "@/components/utill/particle-background";
 
 export default function BlogPage() {
   return (
@@ -38,10 +23,9 @@ export default function BlogPage() {
       {/* Content */}
       <div className="relative z-10">
         <ParticleBackground 
-          particleCount={6} 
+          particleCount={8} 
           floatingElementsCount={2}
         />
-        <FloatingElements count={3} />
         <NavBar />
         
         {/* Hero Section */}
@@ -65,7 +49,10 @@ export default function BlogPage() {
               {/* Search Bar */}
               <div className="max-w-2xl mx-auto">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+                  {(() => {
+                    const SearchIcon = getIcon("Search");
+                    return <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />;
+                  })()}
                   <Input 
                     placeholder="Search articles, topics, or keywords..." 
                     className="pl-10 h-12 text-base"
@@ -106,15 +93,24 @@ export default function BlogPage() {
                   
                   <div className="flex items-center gap-6 text-sm text-muted-foreground">
                     <div className="flex items-center gap-2">
-                      <User className="w-4 h-4" />
+                      {(() => {
+                        const UserIcon = getIcon("User");
+                        return <UserIcon className="w-4 h-4" />;
+                      })()}
                       <span>By Rajesh Kumar</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4" />
+                      {(() => {
+                        const CalendarIcon = getIcon("Calendar");
+                        return <CalendarIcon className="w-4 h-4" />;
+                      })()}
                       <span>Dec 15, 2024</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Clock className="w-4 h-4" />
+                      {(() => {
+                        const ClockIcon = getIcon("Clock");
+                        return <ClockIcon className="w-4 h-4" />;
+                      })()}
                       <span>8 min read</span>
                     </div>
                   </div>
@@ -122,7 +118,10 @@ export default function BlogPage() {
                   <div className="flex items-center gap-4">
                     <Button>
                       Read Full Article
-                      <ArrowRight className="w-4 h-4 ml-2" />
+                      {(() => {
+                        const ArrowRightIcon = getIcon("ArrowRight");
+                        return <ArrowRightIcon className="w-4 h-4 ml-2" />;
+                      })()}
                     </Button>
                     <Badge variant="outline">GST</Badge>
                     <Badge variant="outline">Registration</Badge>
@@ -131,7 +130,10 @@ export default function BlogPage() {
                 
                 <div className="bg-gradient-to-br from-primary/10 to-secondary/10 p-8 lg:p-12 flex items-center justify-center">
                   <div className="text-center space-y-4">
-                    <FileText className="w-16 h-16 mx-auto text-primary" />
+                    {(() => {
+                      const FileTextIcon = getIcon("FileText");
+                      return <FileTextIcon className="w-16 h-16 mx-auto text-primary" />;
+                    })()}
                     <h4 className="text-lg font-semibold">Featured Content</h4>
                     <p className="text-sm text-muted-foreground">
                       In-depth analysis and expert insights
@@ -162,23 +164,26 @@ export default function BlogPage() {
             
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { icon: Building2, title: "Business Registration", count: "24 articles", color: "bg-blue-500/10 text-blue-600" },
-                { icon: Shield, title: "Compliance", count: "18 articles", color: "bg-green-500/10 text-green-600" },
-                { icon: Zap, title: "Tax Updates", count: "32 articles", color: "bg-purple-500/10 text-purple-600" },
-                { icon: TrendingUp, title: "Business Growth", count: "15 articles", color: "bg-orange-500/10 text-orange-600" }
-              ].map((category, index) => (
-                <Card key={index} className="border-border/50 bg-card/50 backdrop-blur-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
-                  <CardContent className="p-6 text-center space-y-4">
-                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center mx-auto ${category.color}`}>
-                      <category.icon className="w-6 h-6" />
-                    </div>
-                    <div className="space-y-2">
-                      <h3 className="font-semibold">{category.title}</h3>
-                      <p className="text-sm text-muted-foreground">{category.count}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                { icon: "Building2", title: "Business Registration", count: "24 articles", color: "bg-blue-500/10 text-blue-600" },
+                { icon: "Shield", title: "Compliance", count: "18 articles", color: "bg-green-500/10 text-green-600" },
+                { icon: "Zap", title: "Tax Updates", count: "32 articles", color: "bg-purple-500/10 text-purple-600" },
+                { icon: "TrendingUp", title: "Business Growth", count: "15 articles", color: "bg-orange-500/10 text-orange-600" }
+              ].map((category, index) => {
+                const IconComponent = getIcon(category.icon);
+                return (
+                  <Card key={index} className="border-border/50 bg-card/50 backdrop-blur-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
+                    <CardContent className="p-6 text-center space-y-4">
+                      <div className={`w-12 h-12 rounded-lg flex items-center justify-center mx-auto ${category.color}`}>
+                        <IconComponent className="w-6 h-6" />
+                      </div>
+                      <div className="space-y-2">
+                        <h3 className="font-semibold">{category.title}</h3>
+                        <p className="text-sm text-muted-foreground">{category.count}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -195,96 +200,116 @@ export default function BlogPage() {
               </div>
               <Button variant="outline">
                 View All Articles
-                <ArrowRight className="w-4 h-4 ml-2" />
+                {(() => {
+                  const ArrowRightIcon = getIcon("ArrowRight");
+                  return <ArrowRightIcon className="w-4 h-4 ml-2" />;
+                })()}
               </Button>
             </div>
             
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[
                 {
-                  title: "New Changes in MSME Registration Process",
-                  excerpt: "Learn about the latest updates to the MSME registration process and how they affect your business.",
+                  title: "New GST Rate Changes Effective from January 2024",
+                  excerpt: "Important updates to GST rates and compliance requirements that all businesses need to know.",
                   author: "Priya Sharma",
                   date: "Dec 12, 2024",
                   readTime: "5 min read",
-                  category: "Registration",
-                  image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&h=250&fit=crop"
+                  category: "Tax Updates",
+                  color: "bg-purple-500/10 text-purple-600"
                 },
                 {
-                  title: "Understanding Digital Signature Certificates",
-                  excerpt: "A comprehensive guide to DSC types, applications, and best practices for business use.",
+                  title: "Complete Guide to MSME Registration Benefits",
+                  excerpt: "Discover all the benefits and advantages of MSME registration for your business growth.",
                   author: "Amit Patel",
                   date: "Dec 10, 2024",
-                  readTime: "6 min read",
-                  category: "Technology",
-                  image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&h=250&fit=crop"
-                },
-                {
-                  title: "Trademark Registration: Common Mistakes to Avoid",
-                  excerpt: "Avoid costly mistakes during trademark registration with these expert tips and guidelines.",
-                  author: "Rajesh Kumar",
-                  date: "Dec 8, 2024",
                   readTime: "7 min read",
-                  category: "Trademark",
-                  image: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=400&h=250&fit=crop"
+                  category: "Registration",
+                  color: "bg-blue-500/10 text-blue-600"
                 },
                 {
-                  title: "ISO 9001:2015 Certification Benefits",
-                  excerpt: "Discover how ISO certification can improve your business processes and customer trust.",
-                  author: "Priya Sharma",
-                  date: "Dec 6, 2024",
-                  readTime: "4 min read",
-                  category: "Certification",
-                  image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=250&fit=crop"
-                },
-                {
-                  title: "GST Return Filing: Step-by-Step Guide",
-                  excerpt: "Complete guide to filing GST returns correctly and avoiding penalties.",
-                  author: "Amit Patel",
-                  date: "Dec 4, 2024",
-                  readTime: "8 min read",
-                  category: "GST",
-                  image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&h=250&fit=crop"
-                },
-                {
-                  title: "Business Compliance Calendar 2024",
-                  excerpt: "Important compliance deadlines and requirements for Indian businesses in 2024.",
-                  author: "Rajesh Kumar",
-                  date: "Dec 2, 2024",
+                  title: "Annual Compliance Checklist for Private Limited Companies",
+                  excerpt: "A comprehensive checklist to ensure your company meets all annual compliance requirements.",
+                  author: "Neha Gupta",
+                  date: "Dec 8, 2024",
                   readTime: "10 min read",
                   category: "Compliance",
-                  image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=250&fit=crop"
+                  color: "bg-green-500/10 text-green-600"
+                },
+                {
+                  title: "Digital Signature Certificate: Everything You Need to Know",
+                  excerpt: "Complete guide to DSC application, benefits, and usage in business transactions.",
+                  author: "Rahul Verma",
+                  date: "Dec 6, 2024",
+                  readTime: "6 min read",
+                  category: "Registration",
+                  color: "bg-blue-500/10 text-blue-600"
+                },
+                {
+                  title: "Trademark Registration Process: Step-by-Step Guide",
+                  excerpt: "Detailed walkthrough of the trademark registration process and important considerations.",
+                  author: "Sneha Reddy",
+                  date: "Dec 4, 2024",
+                  readTime: "8 min read",
+                  category: "Registration",
+                  color: "bg-blue-500/10 text-blue-600"
+                },
+                {
+                  title: "Business Growth Strategies for Small Enterprises",
+                  excerpt: "Proven strategies to scale your business while maintaining compliance standards.",
+                  author: "Vikram Singh",
+                  date: "Dec 2, 2024",
+                  readTime: "12 min read",
+                  category: "Growth",
+                  color: "bg-orange-500/10 text-orange-600"
                 }
               ].map((article, index) => (
-                <Card key={index} className="border-border/50 bg-card/50 backdrop-blur-sm hover:shadow-lg transition-all duration-300 cursor-pointer">
-                  <CardContent className="p-0">
-                    <div className="aspect-video bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center">
-                      <BookOpen className="w-12 h-12 text-primary" />
-                    </div>
-                    <div className="p-6 space-y-4">
-                      <div className="flex items-center gap-2">
-                        <Badge variant="outline" className="text-xs">{article.category}</Badge>
-                      </div>
-                      <h3 className="font-semibold text-lg leading-tight">{article.title}</h3>
-                      <p className="text-sm text-muted-foreground line-clamp-2">{article.excerpt}</p>
-                      
-                      <div className="flex items-center justify-between text-xs text-muted-foreground">
-                        <div className="flex items-center gap-4">
-                          <div className="flex items-center gap-1">
-                            <User className="w-3 h-3" />
-                            <span>{article.author}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Calendar className="w-3 h-3" />
-                            <span>{article.date}</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Clock className="w-3 h-3" />
-                          <span>{article.readTime}</span>
-                        </div>
+                <Card key={index} className="border-border/50 bg-card/50 backdrop-blur-sm hover:shadow-lg transition-all duration-300">
+                  <CardHeader className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <Badge variant="outline" className={`text-xs ${article.color}`}>
+                        {article.category}
+                      </Badge>
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        {(() => {
+                          const ClockIcon = getIcon("Clock");
+                          return <ClockIcon className="w-3 h-3" />;
+                        })()}
+                        {article.readTime}
                       </div>
                     </div>
+                    <CardTitle className="text-lg leading-tight">
+                      {article.title}
+                    </CardTitle>
+                    <CardDescription className="text-sm leading-relaxed">
+                      {article.excerpt}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <Avatar className="w-8 h-8">
+                        <AvatarFallback className="text-xs">
+                          {article.author.split(' ').map(n => n[0]).join('')}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium">{article.author}</p>
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                          {(() => {
+                            const CalendarIcon = getIcon("Calendar");
+                            return <CalendarIcon className="w-3 h-3" />;
+                          })()}
+                          {article.date}
+                        </div>
+                      </div>
+                    </div>
+                    <Button variant="outline" size="sm" className="w-full">
+                      Read More
+                      {(() => {
+                        const ArrowRightIcon = getIcon("ArrowRight");
+                        return <ArrowRightIcon className="w-3 h-3 ml-2" />;
+                      })()}
+                    </Button>
                   </CardContent>
                 </Card>
               ))}
@@ -292,7 +317,7 @@ export default function BlogPage() {
           </div>
         </section>
 
-        {/* Newsletter Section */}
+        {/* Newsletter Signup */}
         <section className="py-20 bg-muted/30">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
             <div className="text-center space-y-8">
@@ -304,35 +329,27 @@ export default function BlogPage() {
                   Subscribe to Our Newsletter
                 </h2>
                 <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                  Get the latest compliance updates, business insights, and expert tips 
-                  delivered directly to your inbox.
+                  Get the latest compliance updates, business insights, and regulatory changes delivered to your inbox.
                 </p>
               </div>
               
-              <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-                <Input 
-                  type="email" 
-                  placeholder="Enter your email" 
-                  className="flex-1"
-                />
-                <Button className="shrink-0">
-                  Subscribe
-                </Button>
-              </div>
-              
-              <div className="flex items-center justify-center gap-8 text-sm text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-green-600" />
-                  <span>Weekly updates</span>
+              <div className="max-w-md mx-auto">
+                <div className="flex gap-3">
+                  <Input 
+                    placeholder="Enter your email address" 
+                    className="flex-1"
+                  />
+                  <Button>
+                    Subscribe
+                    {(() => {
+                      const SendIcon = getIcon("Send");
+                      return <SendIcon className="w-4 h-4 ml-2" />;
+                    })()}
+                  </Button>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-green-600" />
-                  <span>No spam</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Check className="w-4 h-4 text-green-600" />
-                  <span>Unsubscribe anytime</span>
-                </div>
+                <p className="text-xs text-muted-foreground mt-2">
+                  We respect your privacy. Unsubscribe at any time.
+                </p>
               </div>
             </div>
           </div>

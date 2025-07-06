@@ -15,9 +15,9 @@ import {
   PanelRightDashed,
 } from "lucide-react";
 
-import { NavMain } from "@/components/nav-main";
-import { NavProjects } from "@/components/nav-projects";
-import { NavUser } from "@/components/nav-user";
+import { NavMain } from "@/components/nav/nav-main";
+import { NavProjects } from "@/components/nav/nav-projects";
+import { NavUser } from "@/components/nav/nav-user";
 import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
@@ -26,6 +26,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { usePathname } from "next/navigation";
 
 // Icon mapping
 const iconMap: Record<string, React.ElementType> = {
@@ -66,9 +67,9 @@ async function getDashboardData() {
       ],
       navMain: [
         {
-          title: "Dashboard",
-          url: "/dashboard",
-          icon: "PanelRightDashed",
+          title: "Analytics",
+          url: "/analytics",
+          icon: "ChartNoAxesGantt",
           isActive: false,
         },
       ],
@@ -86,6 +87,7 @@ async function getDashboardData() {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [data, setData] = React.useState<any>(null);
   const [loading, setLoading] = React.useState(true);
+  const pathname = usePathname();
 
   React.useEffect(() => {
     const fetchDashboardData = async () => {
@@ -127,7 +129,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     );
   }
 
-  // Transform data to include icon components
+  // Transform data to include icon components and set isActive
   const transformedData = {
     ...data,
     teams: data.teams.map((team: any) => ({
@@ -137,10 +139,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     navMain: data.navMain.map((item: any) => ({
       ...item,
       icon: iconMap[item.icon] || PanelRightDashed,
+      isActive: pathname === item.url || (item.url !== '/' && pathname.startsWith(item.url)),
     })),
     projects: data.projects.map((project: any) => ({
       ...project,
       icon: iconMap[project.icon] || Frame,
+      isActive: pathname === project.url || (project.url !== '/' && pathname.startsWith(project.url)),
     })),
   };
 
@@ -153,9 +157,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={transformedData.navMain} />
         <NavProjects projects={transformedData.projects} />
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={transformedData.user} />
-      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );

@@ -1,15 +1,14 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { NavBar } from "@/components/nav-bar";
+import { NavBar } from "@/components/home/nav-bar";
 import { FooterSection } from "@/components/footer-section";
-import { ParticleBackground } from "@/components/particle-background";
-import { FloatingElements } from "@/components/floating-elements";
+import { ParticleBackground } from "@/components/utill/particle-background";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import * as LucideIcons from "lucide-react";
+import { getIcon } from "@/lib/icons";
 import { getColorByString } from "@/lib/color";
 
 export default function ServicesPage() {
@@ -53,7 +52,6 @@ export default function ServicesPage() {
       </div>
       <div className="relative z-10">
         <ParticleBackground particleCount={10} floatingElementsCount={4} />
-        <FloatingElements count={6} />
         <NavBar />
 
         {/* Mobile category selector */}
@@ -76,7 +74,7 @@ export default function ServicesPage() {
           <aside className="hidden md:block w-full md:w-64 flex-shrink-0 mb-8 md:mb-0">
             <div className="bg-card/80 rounded-2xl shadow p-4 flex flex-col gap-2">
               {services.map((cat, idx) => {
-                const Icon = LucideIcons[cat.icon as keyof typeof LucideIcons] || LucideIcons["Folder"];
+                const IconComponent = getIcon(cat.icon);
                 return (
                   <button
                     key={cat.title}
@@ -84,14 +82,7 @@ export default function ServicesPage() {
                     onClick={() => handleCategoryClick(idx)}
                   >
                     <span className={`rounded-lg p-2 ${getColorByString(cat.title)}`}>
-                      {(() => {
-                        const isLucideIcon = typeof Icon === "function" && (Icon as any).displayName && (Icon as any).iconNode;
-                        if (isLucideIcon) {
-                          const LucideIcon = Icon as React.ComponentType<any>;
-                          return <LucideIcon className="w-6 h-6" />;
-                        }
-                        return null;
-                      })()}
+                      <IconComponent className="w-6 h-6" />
                     </span>
                     <span>{cat.title}</span>
                   </button>
@@ -106,13 +97,12 @@ export default function ServicesPage() {
                 <div className="mb-8">
                   <h2 className="text-3xl font-bold mb-2 flex items-center gap-3">
                     {(() => {
-                      const Icon = LucideIcons[services[selected].icon as keyof typeof LucideIcons] || LucideIcons["Folder"];
-                      const isLucideIcon = typeof Icon === "function" && (Icon as any).displayName && (Icon as any).iconNode;
-                      if (isLucideIcon) {
-                        const LucideIcon = Icon as React.ComponentType<any>;
-                        return <LucideIcon className="w-8 h-8 text-primary" />;
-                      }
-                      return null;
+                      const IconComponent = getIcon(services[selected].icon);
+                      return (
+                        <span className={`rounded-lg p-2 ${getColorByString(services[selected].title)}`}>
+                          <IconComponent className="w-8 h-8 text-primary" />
+                        </span>
+                      );
                     })()}
                     {services[selected].title}
                   </h2>
@@ -146,6 +136,10 @@ export default function ServicesPage() {
                         </Badge>
                         <Button variant="secondary" className="w-full group-hover:scale-105 transition-transform">
                           Learn More
+                          {(() => {
+                            const ArrowRightIcon = getIcon("ArrowRight");
+                            return <ArrowRightIcon className="w-4 h-4 ml-2" />;
+                          })()}
                         </Button>
                       </CardContent>
                     </Card>
@@ -166,6 +160,10 @@ export default function ServicesPage() {
                       )}
                       <Button variant="secondary" className="w-full">
                         Book Consultation
+                        {(() => {
+                          const CalendarIcon = getIcon("Calendar");
+                          return <CalendarIcon className="w-4 h-4 ml-2" />;
+                        })()}
                       </Button>
                     </CardContent>
                   </Card>
