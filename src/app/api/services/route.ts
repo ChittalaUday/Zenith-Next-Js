@@ -96,7 +96,7 @@ const services: Service[] = [
     {
         title: "Compliance",
         desc: "Ongoing compliance monitoring and management for your business.",
-        icon: "ShieldCheck",
+        icon: "ShieldCheck ",
         badge: "default",
         color: "bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200",
         subServices: [

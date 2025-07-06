@@ -55,9 +55,25 @@ export default function ServicesPage() {
         <ParticleBackground particleCount={10} floatingElementsCount={4} />
         <FloatingElements count={6} />
         <NavBar />
+
+        {/* Mobile category selector */}
+        <div className="md:hidden px-4 mt-6">
+          <select
+            value={selected}
+            onChange={(e) => handleCategoryClick(Number(e.target.value))}
+            className="w-full py-3 px-4 bg-card/80 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+          >
+            {services.map((cat, idx) => (
+              <option value={idx} key={cat.title}>
+                {cat.title}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div className="container mx-auto px-2 sm:px-6 lg:px-8 max-w-7xl flex flex-col md:flex-row gap-8 pt-12 pb-24">
           {/* Sidebar */}
-          <aside className="w-full md:w-64 flex-shrink-0 mb-8 md:mb-0">
+          <aside className="hidden md:block w-full md:w-64 flex-shrink-0 mb-8 md:mb-0">
             <div className="bg-card/80 rounded-2xl shadow p-4 flex flex-col gap-2">
               {services.map((cat, idx) => {
                 const Icon = LucideIcons[cat.icon as keyof typeof LucideIcons] || LucideIcons["Folder"];

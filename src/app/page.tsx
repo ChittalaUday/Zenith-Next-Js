@@ -7,12 +7,16 @@ import { CallToActionSection } from "@/components/call-to-action-section";
 import { FooterSection } from "@/components/footer-section";
 import { ParticleBackground } from "@/components/particle-background";
 import { FloatingElements } from "@/components/floating-elements";
+import { getIcon, getLucideIcon } from "@/lib/icons";
 
 export default function Home() {
+
+
+
   return (
     <div className="relative min-h-screen bg-background">
       {/* Glow Background */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-[-2]">
         {/* Bottom-up glow - increased height, very subtle */}
         <div className="absolute bottom-0 left-0 w-full h-2/5 bg-gradient-to-t from-primary/8 via-transparent to-transparent"></div>
         <div className="absolute bottom-0 right-0 w-72 h-72 bg-secondary/5 rounded-full blur-3xl"></div>
@@ -21,6 +25,8 @@ export default function Home() {
         <div className="absolute bottom-0 left-3/4 w-64 h-64 bg-accent/4 rounded-full blur-3xl"></div>
       </div>
 
+
+        
       {/* Content */}
       <div className="relative z-10">
         <ParticleBackground 
@@ -29,6 +35,7 @@ export default function Home() {
         />
         <FloatingElements count={8} />
         <NavBar />
+      
         <HeroSection />
         <ServicesSection />
         <HowItWorksSection />

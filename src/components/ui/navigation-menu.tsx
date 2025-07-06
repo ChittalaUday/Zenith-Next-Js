@@ -2,7 +2,38 @@
 
 import * as React from "react";
 import { ChevronDown, ChevronRight, Menu, X } from "lucide-react";
+import Link from "next/link";
+import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getLucideIcon, getIcon } from "@/lib/icons";
+
+// Simple Tooltip Component
+function Tooltip({ children, content, className }: { children: React.ReactNode; content: string; className?: string }) {
+  const [isVisible, setIsVisible] = React.useState(false);
+
+  return (
+    <div
+      className="relative inline-block"
+      onMouseEnter={() => setIsVisible(true)}
+      onMouseLeave={() => setIsVisible(false)}
+    >
+      {children}
+      {isVisible && (
+        <div
+          className={cn(
+            "absolute z-50 px-2 py-1 text-xs text-white bg-gray-900 rounded shadow-lg whitespace-nowrap",
+            "animate-in fade-in-0 zoom-in-95 duration-200",
+            "bottom-full left-1/2 transform -translate-x-1/2 mb-1",
+            className
+          )}
+        >
+          {content}
+          <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function NavigationMenuRoot({
   children,
@@ -23,7 +54,7 @@ export function NavigationMenuRoot({
         {/* Replace with your logo or text */}
         <button
           onClick={() => setIsMobileMenuOpen(true)}
-          className="inline-flex items-center justify-center p-2 rounded-md text-foreground hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+          className="inline-flex items-center justify-center p-2 rounded-md text-foreground hover:bg-accent/50 hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
           aria-label="Open mobile menu"
         >
           <Menu className="h-6 w-6" />
@@ -38,7 +69,7 @@ export function NavigationMenuRoot({
             <div className="flex justify-end p-4 border-b bg-background">
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="p-2 rounded-md text-foreground hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                className="p-2 rounded-md text-foreground hover:bg-accent/50 hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                 aria-label="Close mobile menu"
               >
                 <X className="h-5 w-5" />
@@ -104,16 +135,34 @@ export function NavigationMenuItem({
   if (isMobile) {
     return (
       <div className={cn("w-full", className)}>
-        {React.Children.map(children, (child) =>
-          React.isValidElement(child) && typeof child.type !== "string"
-            ? React.cloneElement(child, {
-                isHovered: isOpen,
-                isMobile: true,
-                onMobileToggle: handleMobileToggle,
-                closeMobileMenu,
-              } as any)
-            : child
-        )}
+        {React.Children.map(children, (child) => {
+          const propagate = (node: React.ReactNode): React.ReactNode => {
+            if (!React.isValidElement(node)) return node;
+
+            const newProps: any = {};
+            if (typeof node.type !== "string") {
+              newProps.isHovered = isOpen;
+              newProps.isMobile = true;
+              newProps.onMobileToggle = handleMobileToggle;
+              newProps.closeMobileMenu = closeMobileMenu;
+            }
+
+            const childrenProp = (node.props as any)?.children;
+            const shouldClone = Object.keys(newProps).length > 0 || childrenProp !== (node.props as any)?.children;
+            const nextChildren = childrenProp ? React.Children.map(childrenProp, propagate) : childrenProp;
+            
+            // Filter out custom props when cloning to prevent them from reaching DOM elements
+            if (shouldClone && typeof node.type === "string") {
+              const props = node.props as any;
+              const { isHovered, isMobile, onMobileToggle, closeMobileMenu, ...domProps } = props;
+              return React.cloneElement(node, domProps, nextChildren);
+            }
+            
+            return shouldClone ? React.cloneElement(node, newProps, nextChildren) : node;
+          };
+
+          return propagate(child);
+        })}
       </div>
     );
   }
@@ -124,11 +173,31 @@ export function NavigationMenuItem({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {React.Children.map(children, (child) =>
-        React.isValidElement(child) && typeof child.type !== "string"
-          ? React.cloneElement(child, { isHovered } as any)
-          : child
-      )}
+      {React.Children.map(children, (child) => {
+        const propagate = (node: React.ReactNode): React.ReactNode => {
+          if (!React.isValidElement(node)) return node;
+
+          const newProps: any = {};
+          if (typeof node.type !== "string") {
+            newProps.isHovered = isHovered;
+          }
+
+          const childrenProp = (node.props as any)?.children;
+          const shouldClone = Object.keys(newProps).length > 0 || childrenProp !== (node.props as any)?.children;
+          const nextChildren = childrenProp ? React.Children.map(childrenProp, propagate) : childrenProp;
+          
+          // Filter out custom props when cloning to prevent them from reaching DOM elements
+          if (shouldClone && typeof node.type === "string") {
+            const props = node.props as any;
+            const { isHovered, isMobile, onMobileToggle, closeMobileMenu, ...domProps } = props;
+            return React.cloneElement(node, domProps, nextChildren);
+          }
+          
+          return shouldClone ? React.cloneElement(node, newProps, nextChildren) : node;
+        };
+
+        return propagate(child);
+      })}
     </div>
   );
 }
@@ -173,7 +242,7 @@ export function NavigationMenuTrigger({
         onClick={handleClick}
         className={cn(
           "flex items-center justify-between w-full px-3 py-3 text-base font-medium transition-colors rounded-md",
-          "bg-transparent text-foreground hover:bg-accent hover:text-accent-foreground",
+          "bg-transparent text-foreground hover:bg-accent/40 hover:text-accent-foreground",
           "focus:outline-none ",
           className
         )}
@@ -196,7 +265,7 @@ export function NavigationMenuTrigger({
       onClick={onClick}
       className={cn(
         "inline-flex items-center rounded-md px-3 py-2 text-base font-medium transition-colors",
-        "bg-transparent text-foreground hover:bg-accent hover:text-accent-foreground",
+        "bg-transparent text-foreground hover:bg-accent/40 hover:text-accent-foreground",
         "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
         isOpen && !hasDropdown && "bg-accent text-accent-foreground",
         className
@@ -238,11 +307,16 @@ export function NavigationMenuContent({
   if (isMobile) {
     return (
       <div className={cn("w-full mt-2 space-y-1", className)}>
-        {React.Children.map(children, (child) =>
-          React.isValidElement(child)
-            ? React.cloneElement(child, { isMobile: true } as any)
-            : child
-        )}
+        {React.Children.map(children, (child) => {
+          if (!React.isValidElement(child)) return child;
+          
+          // Only pass isMobile to custom components, not DOM elements
+          if (typeof child.type === "string") {
+            return child;
+          }
+          
+          return React.cloneElement(child, { isMobile: true } as any);
+        })}
       </div>
     );
   }
@@ -256,6 +330,9 @@ export function NavigationMenuContent({
         className
       )}
     >
+      {/* Arrow indicator (top) – shadcn style */}
+      <span className="absolute -top-1.5 left-8 w-3 h-3 bg-popover border border-border rotate-45" />
+
       <div className={cn(
         "py-1",
         shouldUseHorizontalLayout ? "grid grid-cols-3 gap-1 p-2 divide-x divide-border" : ""
@@ -287,6 +364,7 @@ export function NavigationMenuLink({
   onClick,
   isMobile,
   closeMobileMenu,
+  icon,
 }: {
   href?: string;
   children: React.ReactNode;
@@ -294,47 +372,85 @@ export function NavigationMenuLink({
   onClick?: () => void;
   isMobile?: boolean;
   closeMobileMenu?: () => void;
+  icon?: string;
 }) {
-  const Component = href ? "a" : "button";
+  const isExternal = href ? /^(?:[a-z][a-z0-9+.-]*:)?\/\//i.test(href) : false;
+  const Component: any = href
+    ? isExternal
+      ? "a"
+      : Link
+    : "button";
+  const IconComponent = icon ? (() => {
+    try {
+      return getLucideIcon(icon) as LucideIcon | undefined;
+    } catch (error) {
+      console.warn(`Failed to load icon "${icon}":`, error);
+      return undefined;
+    }
+  })() : undefined;
+  
 
   const handleClick = () => {
+    if (!href) {
+      // Don't navigate if no href
+      return;
+    }
     onClick?.();
     if (isMobile) {
       closeMobileMenu?.();
     }
   };
+  const content = (
+    <Component
+      {...(href && { href })}
+      onClick={handleClick}
+      className={cn(
+        "block w-full text-left px-3 py-2 text-sm transition-colors rounded-sm",
+        "hover:bg-accent/40 hover:text-accent-foreground",
+        "focus:outline-none focus:bg-accent focus:text-accent-foreground",
+        !href && "cursor-not-allowed opacity-60",
+        className
+      )}
+    >
+      <div className="flex items-center gap-3">
+        
+        {IconComponent && (<IconComponent className="h-4 w-4" />)}
+        {children}
+      </div>
+    </Component>
+  );
 
   if (isMobile) {
     return (
       <Component
-        href={href}
+        {...(href && { href })}
         onClick={handleClick}
         className={cn(
           "block w-full text-left px-4 py-3 text-sm transition-colors rounded-md",
-          "hover:bg-accent hover:text-accent-foreground",
+          "hover:bg-accent/40 hover:text-accent-foreground",
           "focus:outline-none focus:bg-accent focus:text-accent-foreground",
+          !href && "cursor-not-allowed opacity-60",
           className
         )}
       >
-        {children}
+        <div className="flex items-center gap-3">
+          {IconComponent && (<IconComponent className="h-4 w-4" />)}
+          {children}
+        </div>
       </Component>
     );
   }
 
-  return (
-    <Component
-      href={href}
-      onClick={handleClick}
-      className={cn(
-        "block w-full text-left px-3 py-2 text-sm transition-colors rounded-sm",
-        "hover:bg-accent hover:text-accent-foreground",
-        "focus:outline-none focus:bg-accent focus:text-accent-foreground",
-        className
-      )}
-    >
-      {children}
-    </Component>
-  );
+  // Show tooltip for items without href on desktop
+  if (!href) {
+    return (
+      <Tooltip content="Coming Soon">
+        {content}
+      </Tooltip>
+    );
+  }
+
+  return content;
 }
 
 export function NavigationSubMenu({
@@ -342,11 +458,15 @@ export function NavigationSubMenu({
   children,
   isMobile,
   closeMobileMenu,
+  icon,
+  href,
 }: {
   trigger: React.ReactNode;
   children: React.ReactNode;
   isMobile?: boolean;
   closeMobileMenu?: () => void;
+  icon?: string;
+  href?: string;
 }) {
   const [isHovered, setIsHovered] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
@@ -389,14 +509,30 @@ export function NavigationSubMenu({
     };
   }, []);
 
+  const isExternal = href ? /^(?:[a-z][a-z0-9+.-]*:)?\/\//i.test(href) : false;
+  const LinkComponent: any = href ? (isExternal ? "a" : Link) : "span";
+
   if (isMobile) {
+    const IconComponent = icon ? (() => {
+      try {
+        return getIcon(icon) as LucideIcon | undefined;
+      } catch (error) {
+        console.warn(`Failed to load icon "${icon}":`, error);
+        return undefined;
+      }
+    })() : undefined;
     return (
       <div className="w-full">
         <div
           onClick={handleMobileToggle}
-          className="flex w-full items-center justify-between px-4 py-3 text-sm transition-colors rounded-md cursor-pointer hover:bg-accent hover:text-accent-foreground focus:outline-none"
+          className="flex w-full items-center justify-between px-4 py-3 text-sm transition-colors rounded-md cursor-pointer hover:bg-accent/40 hover:text-accent-foreground focus:outline-none"
         >
-          <span>{trigger}</span>
+          <div className="flex items-center gap-3">
+            {IconComponent && (<IconComponent className="h-4 w-4" />)}
+            <LinkComponent {...(href && { href })} className="inline-flex items-center gap-1">
+              <span>{trigger}</span>
+            </LinkComponent>
+          </div>
           <ChevronDown
             className={cn(
               "h-4 w-4 transition-transform duration-200",
@@ -407,14 +543,19 @@ export function NavigationSubMenu({
 
         {isOpen && (
           <div className="flex flex-col w-full pl-4 mt-1 space-y-1 border-l border-muted max-h-60 overflow-y-auto">
-            {React.Children.map(children, (child) =>
-              React.isValidElement(child)
-                ? React.cloneElement(child, {
-                    isMobile: true,
-                    closeMobileMenu,
-                  } as any)
-                : child
-            )}
+            {React.Children.map(children, (child) => {
+              if (!React.isValidElement(child)) return child;
+              
+              // Only pass custom props to custom components, not DOM elements
+              if (typeof child.type === "string") {
+                return child;
+              }
+              
+              return React.cloneElement(child, {
+                isMobile: true,
+                closeMobileMenu,
+              } as any);
+            })}
           </div>
         )}
       </div>
@@ -430,10 +571,23 @@ export function NavigationSubMenu({
     >
       <div
         className={cn(
-          "flex w-full items-center justify-between px-3 py-2 text-sm transition-colors rounded-sm hover:bg-accent hover:text-accent-foreground cursor-pointer"
+          "flex w-full items-center justify-between px-3 py-2 text-sm transition-colors rounded-sm hover:bg-accent/40 hover:text-accent-foreground cursor-pointer"
         )}
       >
-        {trigger}
+        <div className="flex items-center gap-3">
+          {icon && (() => {
+            try {
+              const IconComponentLocal = getIcon(icon) as LucideIcon | undefined;
+              return IconComponentLocal ? <IconComponentLocal className="h-4 w-4" /> : null;
+            } catch (error) {
+              console.warn(`Failed to load icon "${icon}":`, error);
+              return null;
+            }
+          })()}
+          <LinkComponent {...(href && { href })} className="inline-flex items-center gap-1">
+            {trigger}
+          </LinkComponent>
+        </div>
         <ChevronRight className="ml-1 h-4 w-4" />
       </div>
 
@@ -445,6 +599,14 @@ export function NavigationSubMenu({
             React.Children.count(children) > 8 ? "w-auto min-w-[600px]" : "w-48"
           )}
         >
+          {/* Arrow indicator (side) – shadcn style */}
+          <span
+            className={cn(
+              "absolute top-4 w-3 h-3 bg-popover border border-border shadow-sm rotate-45",
+              position === "right" ? "-left-1.5" : "-right-1.5"
+            )}
+          />
+
           <div className={cn(
             "py-1",
             React.Children.count(children) > 8 ? "grid grid-cols-3 gap-1 p-2 divide-x divide-border" : ""

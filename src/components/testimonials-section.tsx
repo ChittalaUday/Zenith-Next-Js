@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { AnimatedCard, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { 
   Carousel, 
   CarouselContent, 
@@ -23,16 +24,16 @@ interface Testimonial {
 // Function to generate consistent colors based on name
 function getAvatarColor(name: string) {
   const colors = [
-    { bg: "bg-blue-600", text: "text-white", border: "border-blue-200" },
-    { bg: "bg-green-600", text: "text-white", border: "border-green-200" },
-    { bg: "bg-purple-600", text: "text-white", border: "border-purple-200" },
-    { bg: "bg-orange-600", text: "text-white", border: "border-orange-200" },
-    { bg: "bg-pink-600", text: "text-white", border: "border-pink-200" },
-    { bg: "bg-indigo-600", text: "text-white", border: "border-indigo-200" },
-    { bg: "bg-teal-600", text: "text-white", border: "border-teal-200" },
-    { bg: "bg-red-600", text: "text-white", border: "border-red-200" },
-    { bg: "bg-yellow-600", text: "text-white", border: "border-yellow-200" },
-    { bg: "bg-cyan-600", text: "text-white", border: "border-cyan-200" },
+    { bg: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200", border: "border-blue-200" },
+    { bg: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200", border: "border-green-200" },
+    { bg: "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200", border: "border-purple-200" },
+    { bg: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200", border: "border-orange-200" },
+    { bg: "bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200", border: "border-pink-200" },
+    { bg: "bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200", border: "border-indigo-200" },
+    { bg: "bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-200", border: "border-teal-200" },
+    { bg: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200", border: "border-red-200" },
+    { bg: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200", border: "border-yellow-200" },
+    { bg: "bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200", border: "border-cyan-200" },
   ];
   
   // Generate a hash from the name to get consistent color
@@ -125,7 +126,11 @@ export function TestimonialsSection() {
           <p className="text-muted-foreground text-lg">Trusted by thousands of businesses across India</p>
         </div>
         
-        <div className="relative max-w-6xl mx-auto">
+        <div 
+          className="relative max-w-6xl mx-auto"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
           <Carousel
             setApi={setApi}
             className="w-full"
@@ -133,55 +138,45 @@ export function TestimonialsSection() {
               align: "start",
               loop: true,
             }}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
           >
-            <CarouselContent className="-ml-2 md:-ml-4">
+            <CarouselContent className="m-2 md:-ml-4">
               {testimonials.map((testimonial) => {
                 const avatarColor = getAvatarColor(testimonial.name);
                 return (
                   <CarouselItem key={testimonial.id} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-                    <Card className="h-full border-0 shadow-lg bg-card/50 backdrop-blur-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                      <CardContent className="p-6 h-full flex flex-col">
-                        {/* Quote Icon */}
-                        <div className="flex justify-start mb-4">
-                          <div className="p-2 rounded-full bg-primary/10">
-                            <Quote className="h-5 w-5 text-primary" />
+                    <AnimatedCard className="h-full group">
+                      <CardHeader className="pb-3">
+                        <div className="flex items-center justify-between mb-3">
+                          <Badge variant="secondary" className={`p-2 flex items-center justify-center size-10 ${avatarColor.bg} transition-all duration-300 group-hover:shadow-lg group-hover:ring-2 group-hover:ring-primary/40`}>
+                            <Quote className="size-5 drop-shadow transition-all duration-300 group-hover:scale-125" />
+                          </Badge>
+                          <div className="flex gap-1">
+                            {[...Array(5)].map((_, i) => (
+                              <Star key={i} className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                            ))}
                           </div>
                         </div>
+                      </CardHeader>
+                      <CardContent className="pt-0">
+                        <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                          {testimonial.quote}
+                        </p>
                         
-                        {/* Rating Stars */}
-                        <div className="flex gap-1 mb-4">
-                          {[...Array(5)].map((_, i) => (
-                            <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                          ))}
-                        </div>
-                        
-                        {/* Quote Text */}
-                        <div className="flex-1">
-                          <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-                            {testimonial.quote}
-                          </p>
-                        </div>
-                        
-                        {/* Author Info with Badge Style */}
                         <div className="flex items-center gap-3 mt-auto">
-                          <Avatar className={`h-10 w-10 border ${avatarColor.bg} ${avatarColor.border}`}>
-                            <AvatarFallback className={`${avatarColor.text} font-semibold`}>
+                          <Avatar className="h-8 w-8 border">
+                            <AvatarFallback className="text-xs font-semibold">
                               {testimonial.avatar || testimonial.name.split(' ').map(n => n[0]).join('')}
                             </AvatarFallback>
                           </Avatar>
                           <div className="flex-1">
-                            {/* Name Badge */}
-                            <div className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${avatarColor.bg} ${avatarColor.text} mb-1`}>
+                            <Badge variant="outline" className={`text-xs font-semibold ${avatarColor.bg} mb-1`}>
                               {testimonial.name}
-                            </div>
-                            {/* Role */}
+                            </Badge>
                             <p className="text-xs text-muted-foreground">{testimonial.role}</p>
                           </div>
                         </div>
                       </CardContent>
-                    </Card>
+                    </AnimatedCard>
                   </CarouselItem>
                 );
               })}

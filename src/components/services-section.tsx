@@ -4,7 +4,7 @@ import React from "react";
 import { AnimatedCard, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge, type BadgeProps } from "@/components/ui/badge";
-import { Briefcase, FileText, Landmark, BadgeCheck, Receipt, Banknote, Users } from "lucide-react";
+import { Briefcase, FileText, Landmark, BadgeCheck, Receipt, Banknote, Users,ShieldCheck  } from "lucide-react";
 
 interface Service {
   title: string;
@@ -23,6 +23,7 @@ const iconMap: Record<string, React.ElementType> = {
   Receipt,
   Banknote,
   Users,
+  ShieldCheck
 };
 
 // Function to fetch services data from API

@@ -6,10 +6,10 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export function HeroSection() {
   return (
-    <section className="relative w-full min-h-screen flex justify-center overflow-hidden">
+    <section className="relative w-full flex justify-center overflow-hidden pt-6 pb-12 sm:pb-20 lg:pb-24">
       {/* Container with max-width for larger screens */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-        <div className="relative z-10 grid lg:grid-cols-2 gap-10 lg:gap-16 xl:gap-20 items-center min-h-[calc(100vh-4rem)] py-20">
+        <div className="relative z-10 grid lg:grid-cols-2 gap-10 lg:gap-16 xl:gap-20 items-center pt-6 pb-12">
           
           {/* Left Side - Content */}
           <div className="flex flex-col space-y-10 max-w-2xl">

@@ -3,18 +3,22 @@ import { NextResponse } from 'next/server';
 export interface MenuItem {
     label: string;
     href?: string;
+    icon?: string;
     subItems?: MenuItem[];
 }
 
 const menuData: MenuItem[] = [
-    { label: "Home", href: "/" },
-    { label: "About", href: "/about" },
+    { label: "Home", href: "/", icon: "Home" },
+    { label: "About", href: "/about", icon: "Info" },
     {
         label: "Services",
         href: "/services",
+        icon: "HandCoins",
         subItems: [
             {
                 label: "Startup",
+                icon: "Rocket",
+                href: "/services?cat=startup",
                 subItems: [
                     { label: "Startup India", href: "#" },
                     { label: "Trade License", href: "#" },
@@ -48,6 +52,8 @@ const menuData: MenuItem[] = [
             },
             {
                 label: "Registrations",
+                icon: "FileCheck",
+                href: "/services?cat=registrations",
                 subItems: [
                     { label: "Trade License", href: "#" },
                     { label: "ISO Registration", href: "#" },
@@ -60,6 +66,8 @@ const menuData: MenuItem[] = [
             },
             {
                 label: "Trademark",
+                icon: "Shield",
+                href: "/services?cat=trademark",
                 subItems: [
                     { label: "12A Registration", href: "#" },
                     { label: "80G Registration", href: "#" },
@@ -71,6 +79,8 @@ const menuData: MenuItem[] = [
             },
             {
                 label: "Goods & Services Tax",
+                icon: "Receipt",
+                href: "/services?cat=gst",
                 subItems: [
                     { label: "Digital Signature", href: "#" },
                     { label: "Shop Act Registration", href: "#" },
@@ -82,32 +92,49 @@ const menuData: MenuItem[] = [
             },
             {
                 label: "Income Tax",
+                icon: "Calculator",
+                href: "/services?cat=income-tax",
             },
             {
                 label: "MCA",
+                icon: "Building2",
+                href: "/services?cat=mca",
             },
             {
                 label: "Consultation",
+                icon: "Users",
             },
         ]
     },
     {
         label: "Knowledge Center",
+        icon: "BookOpen",
         subItems: [
             { label: "Blog", href: "/blog" },
             { label: "Guides", href: "/blog#guides" },
             { label: "FAQs", href: "/contact#faq" },
             {
                 label: "More Services",
+                icon: "MoreHorizontal",
                 subItems: [
                     { label: "FSSAI License", href: "#" },
                     { label: "MSME Registration", href: "#" },
                 ],
             },
+            {
+                label: "Video Tutorials",
+                icon: "Video",
+                // No href - will show "Coming Soon"
+            },
+            {
+                label: "Webinars",
+                icon: "Monitor",
+                // No href - will show "Coming Soon"
+            },
         ],
     },
-    { label: "Pricing", href: "/pricing" },
-    { label: "Contact", href: "/contact" },
+    { label: "Pricing", href: "/pricing", icon: "IndianRupee" },
+    { label: "Contact", href: "/contact", icon: "Mail" },
 ];
 
 export async function GET() {

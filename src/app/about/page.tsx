@@ -21,6 +21,7 @@ import {
   Zap,
   Heart
 } from "lucide-react";
+import { getColorByString } from "@/lib/color";
 
 export default function AboutPage() {
   return (
@@ -71,7 +72,9 @@ export default function AboutPage() {
                 ].map((stat, index) => (
                   <Card key={index} className="text-center border-border/50 bg-card/50 backdrop-blur-sm">
                     <CardContent className="p-6">
-                      <stat.icon className="w-8 h-8 mx-auto mb-3 text-primary" />
+                      <div className={`w-12 h-12 mx-auto mb-3 rounded-lg flex items-center justify-center ${getColorByString(stat.label)}`}>
+                        <stat.icon className="w-6 h-6" />
+                      </div>
                       <div className="text-2xl font-bold">{stat.value}</div>
                       <div className="text-sm text-muted-foreground">{stat.label}</div>
                     </CardContent>
@@ -126,8 +129,8 @@ export default function AboutPage() {
                         { icon: Heart, title: "Dedicated Support", desc: "Our expert team is always ready to help you succeed" }
                       ].map((value, index) => (
                         <div key={index} className="flex items-start gap-4">
-                          <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                            <value.icon className="w-6 h-6 text-primary" />
+                          <div className={`flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center ${getColorByString(value.title)}`}>
+                            <value.icon className="w-6 h-6" />
                           </div>
                           <div className="space-y-2">
                             <h4 className="font-semibold">{value.title}</h4>
@@ -188,7 +191,7 @@ export default function AboutPage() {
                 <Card key={index} className="border-border/50 bg-card/50 backdrop-blur-sm hover:shadow-lg transition-all duration-300">
                   <CardContent className="p-6">
                     <div className="text-center space-y-4">
-                      <Avatar className="w-20 h-20 mx-auto">
+                      <Avatar className={`w-20 h-20 mx-auto ${getColorByString(member.name)}`}>
                         <AvatarImage src={member.image} alt={member.name} />
                         <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                       </Avatar>
@@ -199,7 +202,7 @@ export default function AboutPage() {
                       </div>
                       <div className="flex flex-wrap gap-2 justify-center">
                         {member.expertise.map((skill, skillIndex) => (
-                          <Badge key={skillIndex} variant="outline" className="text-xs">
+                          <Badge key={skillIndex} variant="outline" className={`text-xs ${getColorByString(skill)}`}>
                             {skill}
                           </Badge>
                         ))}
@@ -265,14 +268,12 @@ export default function AboutPage() {
               ].map((value, index) => (
                 <Card key={index} className="border-border/50 bg-card/50 backdrop-blur-sm hover:shadow-lg transition-all duration-300 group">
                   <CardContent className="p-6">
-                    <div className="space-y-4">
-                      <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                        <value.icon className="w-6 h-6 text-primary" />
-                      </div>
-                      <div className="space-y-2">
-                        <h3 className="text-xl font-semibold">{value.title}</h3>
-                        <p className="text-muted-foreground">{value.description}</p>
-                      </div>
+                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center transition-colors ${getColorByString(value.title)}`}>
+                      <value.icon className="w-6 h-6" />
+                    </div>
+                    <div className="space-y-2">
+                      <h3 className="text-xl font-semibold">{value.title}</h3>
+                      <p className="text-muted-foreground">{value.description}</p>
                     </div>
                   </CardContent>
                 </Card>

@@ -7,6 +7,11 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import * as LucideIcons from "lucide-react";
 import { getColorByString } from "@/lib/color";
+import { serviceFaqs, serviceGuides } from "@/lib/faq-data";
+import { TestimonialsSection } from "@/components/testimonials-section";
+import { NavBar } from "@/components/nav-bar";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { FooterSection } from "@/components/footer-section";
 
 export default function SubServicePage() {
   const router = useRouter();
@@ -55,67 +60,110 @@ export default function SubServicePage() {
   }
 
   const Icon = LucideIcons[parent.icon as keyof typeof LucideIcons] || LucideIcons["Folder"];
-  const isLucideIcon = typeof Icon === "function" && (Icon as any).displayName && (Icon as any).iconNode;
-  const LucideIcon = isLucideIcon ? (Icon as React.ComponentType<any>) : null;
+  const LucideIcon = typeof Icon === "function" ? (Icon as React.ComponentType<any>) : null;
+  const subSlug = sub.title.toLowerCase().replace(/\s+/g, "-");
+  const faqs = serviceFaqs[subSlug] || [];
+  const guides = serviceGuides[subSlug] || [];
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[80vh] px-4 py-12">
-      <Card className="w-full max-w-2xl shadow-xl border-border/60 bg-card/90 backdrop-blur-lg">
-        <CardHeader className="flex flex-row items-center gap-4 pb-4">
-          <span className={`rounded-lg p-3 ${getColorByString(parent.title)}`}>
-            {LucideIcon ? <LucideIcon className="w-8 h-8" /> : null}
-          </span>
-          <div>
-            <CardTitle className="text-2xl font-bold flex items-center gap-2">
-              {sub.title}
-              <Badge variant="secondary" className={`ml-2 px-3 py-1 ${getColorByString(sub.title)}`}>{sub.price}</Badge>
-            </CardTitle>
-            <CardDescription className="text-muted-foreground text-base">{parent.title}</CardDescription>
-          </div>
-        </CardHeader>
-        <CardContent className="pt-0 flex flex-col gap-6">
-          <div className="flex items-center gap-4">
-            <Avatar className={`w-14 h-14 ${getColorByString(sub.title)}`}>
-              <AvatarFallback>{sub.title.split(" ").map((w: string) => w[0]).join("").slice(0,2)}</AvatarFallback>
-            </Avatar>
-            <div>
-              <div className="text-lg font-semibold">{sub.title}</div>
+    <div className="min-h-screen bg-background flex flex-col">
+      <NavBar />
+      <main className="flex-1 w-full max-w-3xl mx-auto px-4 py-10">
+        {/* Unified Product Card */}
+        <Card className="flex flex-col gap-6 p-8 shadow-lg border-border/60 bg-card/90 mb-10">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-2">
+            <div className={`rounded-xl p-4 ${getColorByString(parent.title)}`}>{LucideIcon && <LucideIcon className="w-10 h-10" />}</div>
+            <div className="flex-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="text-2xl font-bold">{sub.title}</h1>
+                <Badge variant="secondary" className={`px-3 py-1 ${getColorByString(sub.title)}`}>{sub.price}</Badge>
+                {sub.estimation && (
+                  <Badge variant="outline" className="text-xs px-2 py-0.5 flex items-center gap-1">
+                    <LucideIcons.Clock className="w-4 h-4" />
+                    {sub.estimation}
+                  </Badge>
+                )}
+              </div>
+              <div className="text-muted-foreground text-base mt-1">{parent.title}</div>
               <div className="text-muted-foreground text-sm">{sub.desc}</div>
             </div>
           </div>
-          <div className="flex flex-wrap gap-4 items-center">
+
+          {sub.details && (
+            <div className="prose prose-sm max-w-none text-foreground bg-muted/30 rounded-lg p-4 mb-2">
+              {sub.details}
+            </div>
+          )}
+
+          <div className="flex flex-col gap-4 items-start">
             {sub.documents && sub.documents.length > 0 && (
-              <div className="flex flex-col gap-1">
-                <span className="font-medium text-sm flex items-center gap-1"><LucideIcons.FileText className="w-4 h-4" /> Documents Required:</span>
-                <div className="flex flex-wrap gap-2 mt-1">
+              <div className="flex flex-col gap-1 w-full">
+                <span className="font-semibold text-base flex items-center gap-1 mb-1"><LucideIcons.FileText className="w-4 h-4" /> Documents Required:</span>
+                <ul className="list-disc list-inside ml-2 text-sm text-muted-foreground">
                   {sub.documents.map((doc: string) => (
-                    <Badge key={doc} variant="outline" className={`px-2 py-1 ${getColorByString(doc)}`}>{doc}</Badge>
+                    <li key={doc}>{doc}</li>
                   ))}
-                </div>
+                </ul>
               </div>
             )}
             {typeof sub.rating === "number" && (
-              <div className="flex items-center gap-1 text-yellow-600 font-medium">
+              <div className="flex items-center gap-1 text-yellow-600 font-medium mt-2">
                 <LucideIcons.Star className="w-5 h-5 fill-yellow-400 text-yellow-400 mr-1" />
                 {sub.rating.toFixed(1)}
               </div>
             )}
-            {sub.estimation && (
-              <div className="flex items-center gap-1 text-muted-foreground">
-                <LucideIcons.Clock className="w-4 h-4" />
-                <span className="text-sm">{sub.estimation}</span>
-              </div>
-            )}
           </div>
-          {sub.details && (
-            <div className="prose prose-sm max-w-none text-foreground bg-muted/30 rounded-lg p-4">
-              {sub.details}
+
+          <div className="flex flex-col gap-2 mt-6">
+            <Button size="lg" className="w-full" variant="default">Get Started</Button>
+            <Button size="lg" className="w-full" variant="outline" onClick={() => router.push("/services")}>Back to Services</Button>
+          </div>
+        </Card>
+
+        {/* FAQ Section */}
+        <section>
+          <div className="text-left mb-4 flex items-center gap-2">
+            <Badge variant="secondary" className="text-sm">FAQ</Badge>
+            <span className="text-lg font-bold">Frequently Asked Questions</span>
+          </div>
+          <Accordion type="single" collapsible className="w-full">
+            {faqs.length > 0 ? faqs.map((faq, idx) => (
+              <AccordionItem value={`faq-${idx}`} key={idx}>
+                <AccordionTrigger className="text-base font-semibold flex items-center gap-2">
+                  <LucideIcons.HelpCircle className="w-5 h-5 text-primary" />
+                  {faq.question}
+                  {faq.label && <Badge variant="secondary" className="ml-2 text-xs px-2 py-0.5">{faq.label}</Badge>}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground pl-8">
+                  {faq.answer}
+                </AccordionContent>
+              </AccordionItem>
+            )) : (
+              <div className="text-center text-muted-foreground">No FAQs available for this service yet.</div>
+            )}
+          </Accordion>
+        </section>
+
+        {/* Guides Section */}
+        <section className="mt-10">
+          <Card className="p-6 shadow-lg border-border/60 bg-card/90">
+            <div className="font-semibold text-lg mb-4 flex items-center gap-2">
+              <LucideIcons.BookOpen className="w-5 h-5 text-primary" />
+              Related Guides
             </div>
-          )}
-          <Button size="lg" className="w-full mt-2" variant="default">Get Started</Button>
-          <Button size="lg" className="w-full" variant="outline" onClick={() => router.push("/services")}>Back to Services</Button>
-        </CardContent>
-      </Card>
+            <ul className="flex flex-col gap-3">
+              {guides.length > 0 ? guides.map((guide, idx) => (
+                <li key={idx} className="flex items-center gap-2">
+                  <LucideIcons.Link2 className="w-4 h-4 text-muted-foreground" />
+                  <a href={guide.url} className="text-primary underline text-sm hover:text-primary/80 transition-colors">{guide.title}</a>
+                  {guide.label && <Badge variant="outline" className="ml-2 text-xs px-2 py-0.5">{guide.label}</Badge>}
+                </li>
+              )) : <li className="text-muted-foreground text-sm">No guides available for this service yet.</li>}
+            </ul>
+          </Card>
+        </section>
+      </main>
+      <FooterSection />
     </div>
   );
 } 
